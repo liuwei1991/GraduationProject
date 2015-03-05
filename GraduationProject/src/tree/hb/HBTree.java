@@ -79,8 +79,7 @@ public class HBTree {
 
 	public ConcurrentSkipListMap<String, Node> scan(String fromKey,
 			boolean fromInclusive, String toKey, boolean toInclusive) {
-		ConcurrentSkipListMap<String, Value> result = new ConcurrentSkipListMap<String, Value>(
-				c);
+		ConcurrentSkipListMap<String, Value> result = new ConcurrentSkipListMap<String, Value>(c);
 		ConcurrentSkipListMap<String, Node> cur = (ConcurrentSkipListMap<String, Node>) this.delegatee
 				.subMap(fromKey, fromInclusive, toKey, toInclusive);
 
@@ -106,5 +105,5 @@ public class HBTree {
 		ConcurrentSkipListMap<String, Node> cur = (ConcurrentSkipListMap<String, Node>) node.getNextLayer().subMap(fromKey, fromInclusive, toKey, toInclusive);
 		
 	}
-
+	
 }
