@@ -4,22 +4,22 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 import tree.bplus.Value;
 
-public class Data {
-	private ConcurrentSkipListMap<String,Data> nextLayer;
+public class Node {
+	private ConcurrentSkipListMap<String,Node> nextLayer;
 	private boolean isValue;
 	private Value value;
 	
-	public Data(){
-		this.nextLayer = new ConcurrentSkipListMap<String,Data>();
+	public Node(){
+		this.nextLayer = null;
 		this.isValue = false;
 		this.value = null;
 	}
 
-	public ConcurrentSkipListMap<String, Data> getNextLayer() {
+	public ConcurrentSkipListMap<String, Node> getNextLayer() {
 		return nextLayer;
 	}
 
-	public void setNextLayer(ConcurrentSkipListMap<String, Data> nextLayer) {
+	public void setNextLayer(ConcurrentSkipListMap<String, Node> nextLayer) {
 		this.nextLayer = nextLayer;
 	}
 
@@ -27,7 +27,7 @@ public class Data {
 		return isValue;
 	}
 
-	public void setValue(boolean isValue) {
+	public void setIsValue(boolean isValue) {
 		this.isValue = isValue;
 	}
 
