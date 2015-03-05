@@ -15,6 +15,7 @@ public class BSkipListTest {
 	public void test() {
 		
 	}
+	
 
 	BSkipListTest(final Comparator c) {
 		this.delegatee = new ConcurrentSkipListMap<String, Value>(c);
@@ -23,32 +24,6 @@ public class BSkipListTest {
 	BSkipListTest(final ConcurrentNavigableMap<String, Value> m) {
 		this.delegatee = m;
 	}
-
-
-	public Iterator<Value> descendingIterator() {
-		return this.delegatee.descendingMap().values().iterator();
-	}
-	/**
-	 * public SortedSet<String> headSet(final String toElement) { return
-	 * headSet(toElement, false); }
-	 * 
-	 * public NavigableSet<String> headSet(final String toElement, boolean
-	 * inclusive) { return new
-	 * StringSkipListSet(this.delegatee.headMap(toElement, inclusive)); }
-	 */
-
-	public Iterator<Value> iterator() {
-		return this.delegatee.values().iterator();
-	}
-
-	/**
-	 * public SortedSet<String> tailSet(String fromElement) { return
-	 * tailSet(fromElement, true); }
-	 * 
-	 * public NavigableSet<String> tailSet(String fromElement, boolean
-	 * inclusive) { return new
-	 * StringSkipListSet(this.delegatee.tailMap(fromElement, inclusive)); }
-	 */
 
 	public Value first() {
 		return this.delegatee.get(this.delegatee.firstKey());
@@ -60,6 +35,18 @@ public class BSkipListTest {
 
 	public boolean add(String e, Value v) {
 		return this.delegatee.put(e, v) == null;
+	}
+	
+	public Value get(String kv) {
+		return this.delegatee.get(kv);
+	}
+	
+	public boolean remove(Object o) {
+		return this.delegatee.remove(o) != null;
+	}
+	
+	public ConcurrentSkipListMap<String, Value> scan(String fromKey,boolean fromInclusive,String toKey,boolean toInclusive){
+		return (ConcurrentSkipListMap<String, Value>) this.delegatee.subMap(fromKey, fromInclusive, toKey, toInclusive);
 	}
 
 
@@ -76,20 +63,40 @@ public class BSkipListTest {
 		return this.delegatee.isEmpty();
 	}
 
-	public boolean remove(Object o) {
-		return this.delegatee.remove(o) != null;
-	}
 
-	public Value get(String kv) {
-		return this.delegatee.get(kv);
-	}
 
 	public int size() {
 		return this.delegatee.size();
 	}
 	
+	public Iterator<Value> descendingIterator() {
+		return this.delegatee.descendingMap().values().iterator();
+	}
 	
+	public Iterator<Value> iterator() {
+		return this.delegatee.values().iterator();
+	}
 	
+	/**
+	 * public SortedSet<String> headSet(final String toElement) { return
+	 * headSet(toElement, false); }
+	 * 
+	 * public NavigableSet<String> headSet(final String toElement, boolean
+	 * inclusive) { return new
+	 * StringSkipListSet(this.delegatee.headMap(toElement, inclusive)); }
+	 */
+
+
+	/**
+	 * public SortedSet<String> tailSet(String fromElement) { return
+	 * tailSet(fromElement, true); }
+	 * 
+	 * public NavigableSet<String> tailSet(String fromElement, boolean
+	 * inclusive) { return new
+	 * StringSkipListSet(this.delegatee.tailMap(fromElement, inclusive)); }
+	 */
+
+
 	
 	
 	
