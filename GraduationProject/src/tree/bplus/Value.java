@@ -16,6 +16,10 @@ public class Value {
 		this.value = value;
 	}
 
+	public Value(String value){
+		this.value = value;
+	}
+	
 	public long getTs() {
 		return ts;
 	}
