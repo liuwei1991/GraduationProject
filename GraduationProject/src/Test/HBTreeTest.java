@@ -1,7 +1,11 @@
-package tree.hb;
+package Test;
 
 import java.io.IOException;
 import java.util.Comparator;
+
+import tree.hb.GetTest;
+import tree.hb.HBTree;
+import tree.hb.PutTest;
 
 public class HBTreeTest {
 	public static void main(String[] args) throws IOException{

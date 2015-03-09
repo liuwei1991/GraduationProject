@@ -7,7 +7,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import tree.bplus.Value;
+import common.Value;
 
 public class HBTree {
 	private Node rootNode;

@@ -6,6 +6,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
 
+import common.Value;
+
+import Test.BSkipListTest;
+
 public class PutTest {
 	private BSkipListTest bskl;
 	private String inPutFilePath;

@@ -1,4 +1,4 @@
-package tree.bplus;
+package Test;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -7,6 +7,8 @@ import java.util.NavigableSet;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
+
+import common.Value;
 
 public class BSkipListTest {
 
@@ -17,11 +19,11 @@ public class BSkipListTest {
 	}
 	
 
-	BSkipListTest(final Comparator c) {
+	public BSkipListTest(final Comparator c) {
 		this.delegatee = new ConcurrentSkipListMap<String, Value>(c);
 	}
 
-	BSkipListTest(final ConcurrentNavigableMap<String, Value> m) {
+	public BSkipListTest(final ConcurrentNavigableMap<String, Value> m) {
 		this.delegatee = m;
 	}
 

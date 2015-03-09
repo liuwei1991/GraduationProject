@@ -2,7 +2,7 @@ package tree.hb;
 
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import tree.bplus.Value;
+import common.Value;
 
 public class Node {
 	private ConcurrentSkipListMap<String,Node> nextLayer;

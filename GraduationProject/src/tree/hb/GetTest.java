@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
 
-import tree.bplus.Value;
+import common.Value;
 
 public class GetTest{
 	private HBTree hbtree;
