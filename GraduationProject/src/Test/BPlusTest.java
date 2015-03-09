@@ -3,10 +3,10 @@ package Test;
 import java.io.IOException;
 import java.util.Comparator;
 
-import tree.bplus.BSkipList;
-import tree.bplus.PutTest;
+import tree.bplus.BPlus;
+import tree.bplus.BPPutTest;
 
-public class BSkipListTest {
+public class BPlusTest {
 
 	public static void main(String[] args) throws IOException{
 		Comparator<String> c = new Comparator<String>(){
@@ -21,8 +21,8 @@ public class BSkipListTest {
 				return 1;
 			}
 		};
-		BSkipList bskl= new BSkipList(c);
-		PutTest pt = new PutTest(bskl,"d:/a.txt");
+		BPlus bskl= new BPlus(c);
+		BPPutTest pt = new BPPutTest(bskl,"d:/a.txt");
 		pt.doPut();
 		
 	}

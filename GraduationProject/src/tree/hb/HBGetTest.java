@@ -8,11 +8,11 @@ import java.util.Comparator;
 
 import common.Value;
 
-public class GetTest{
+public class HBGetTest{
 	private HBTree hbtree;
 	private String inPutFilePath ;
 	
-	public GetTest(HBTree hbtree,String inPutFilePath){
+	public HBGetTest(HBTree hbtree,String inPutFilePath){
 		this.hbtree = hbtree;
 		this.inPutFilePath = inPutFilePath;
 	}

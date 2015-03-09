@@ -8,17 +8,16 @@ import java.util.Comparator;
 
 import common.Value;
 
-public class GetTest {
-
-	private BSkipList bskl;
+public class BPPutTest {
+	private BPlus bskl;
 	private String inPutFilePath;
 	
-	public GetTest(BSkipList bskl,String inPutFilePath){
+	public BPPutTest(BPlus bskl,String inPutFilePath){
 		this.bskl = bskl;
 		this.inPutFilePath = inPutFilePath;
 	}
 	
-	public void doGet() throws IOException{
+	public void doPut() throws IOException{
 		File file = new File(this.inPutFilePath);
 		if(!file.exists()){
 			System.out.println("Input file is not found!");
@@ -56,11 +55,10 @@ public class GetTest {
 				return 1;
 			}
 		};
-		BSkipList bskl= new BSkipList(c);
-		PutTest pt = new PutTest(bskl,"d:/a.txt");
-		pt.doInput();
+		BPlus bskl= new BPlus(c);
+		BPPutTest pt = new BPPutTest(bskl,"d:/a.txt");
+		pt.doPut();
 	}
 	
-
 
 }

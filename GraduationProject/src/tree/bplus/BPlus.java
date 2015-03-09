@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 import common.Value;
 
-public class BSkipList {
+public class BPlus {
 
 	private final ConcurrentNavigableMap<String, Value> delegatee;
 
@@ -18,12 +18,11 @@ public class BSkipList {
 		
 	}
 	
-
-	public BSkipList(final Comparator c) {
+	public BPlus(final Comparator c) {
 		this.delegatee = new ConcurrentSkipListMap<String, Value>(c);
 	}
 
-	public BSkipList(final ConcurrentNavigableMap<String, Value> m) {
+	public BPlus(final ConcurrentNavigableMap<String, Value> m) {
 		this.delegatee = m;
 	}
 
@@ -39,8 +38,8 @@ public class BSkipList {
 		return this.delegatee.put(e, v) == null;
 	}
 	
-	public Value get(String kv) {
-		return this.delegatee.get(kv);
+	public Value get(String key) {
+		return this.delegatee.get(key);
 	}
 	
 	public boolean remove(Object o) {

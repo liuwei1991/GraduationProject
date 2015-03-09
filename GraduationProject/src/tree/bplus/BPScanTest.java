@@ -1,5 +1,5 @@
 package tree.bplus;
 
-public class ScanTest {
+public class BPScanTest {
 
 }

@@ -8,11 +8,11 @@ import java.util.Comparator;
 
 import common.Value;
 
-public class PutTest {
+public class HBPutTest {
 	private HBTree hbtree;
 	private String inPutFilePath ;
 	
-	public PutTest(HBTree hbtree,String inPutFilePath){
+	public HBPutTest(HBTree hbtree,String inPutFilePath){
 		this.hbtree = hbtree;
 		this.inPutFilePath = inPutFilePath;
 	}
@@ -58,7 +58,7 @@ public class PutTest {
 			}
 		};
 		HBTree hbtree= new HBTree(c);
-		PutTest pt = new PutTest(hbtree,"d:/a.txt");
+		HBPutTest pt = new HBPutTest(hbtree,"d:/a.txt");
 		pt.doPut();
 	}
 	
