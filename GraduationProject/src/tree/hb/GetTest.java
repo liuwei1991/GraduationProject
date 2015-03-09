@@ -27,19 +27,24 @@ public class GetTest{
 		BufferedReader br = new BufferedReader(fr);
 		
 		int totalNum = 0;
+		Long s = System.currentTimeMillis();
 		while(true){
-			String s = br.readLine();
-			if(s==null){
+			String str = br.readLine();
+			if(str==null){
 				break;
 			}
-			String key = s.split(" ")[0];
-			String value1 = s.split(" ")[1];
-			Value v = this.hbtree.get(key);
-			String value2 = v==null?"null":v.getValue();
-			System.out.println("key = "+key+" , keylen = "+key.length()+" , value1 = "+value1+" , value2 = "+value2);
+			String key = str.split(" ")[0];
+			this.hbtree.get(key);
+			
+//			String value1 = s.split(" ")[1];
+//			Value v = this.hbtree.get(key);
+//			String value2 = v==null?"null":v.getValue();
+//			System.out.println("key = "+key+" , keylen = "+key.length()+" , value1 = "+value1+" , value2 = "+value2);
 			totalNum++;
 		}
-		System.out.println("Total number: "+totalNum);
+		Long e = System.currentTimeMillis();
+//		System.out.println("Total number: "+totalNum);
+		System.out.println("HBTree - GetTest - total number: "+totalNum+" , Total time: "+(e-s)/1000.0+"s. Speed:"+totalNum*1000.0/(e-s)+" /second.");
 	}
 	
 }

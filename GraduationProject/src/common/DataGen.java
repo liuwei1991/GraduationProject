@@ -50,7 +50,7 @@ public class DataGen {
 	}
 	
 	public static void main(String[] args) throws IOException{
-		DataGen dg = new DataGen(1000000,16,"d:/a.txt");
+		DataGen dg = new DataGen(20,16,"d:/a.txt");
 		dg.genData();
 	}
 }

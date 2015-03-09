@@ -41,6 +41,7 @@ public class PutTest {
 		}
 		Long e = System.currentTimeMillis();
 		System.out.println("HBTree - PutTest - total number: "+totalNum+" , Total time: "+(e-s)/1000.0+"s. Speed:"+totalNum*1000.0/(e-s)+" /second.");
+//		HBTree.printHBTree(this.hbtree.rootNode);
 	}
 	
 	public static void main(String[] args) throws IOException{
@@ -50,6 +51,8 @@ public class PutTest {
 			public int compare(String o1, String o2) {
 				if(o1.compareTo(o2)<0){
 					return -1;
+				}else if(o1.compareTo(o2)==0){
+					return 0;
 				}
 				return 1;
 			}

@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import common.Value;
 
 public class HBTree {
-	private Node rootNode;
+	public  Node rootNode;
 	private int chunkSize = 8;
 	private int minLayerNum = 0;
 	private Comparator c;
@@ -28,19 +28,20 @@ public class HBTree {
 	public Value get(String key) {
 		int len = 0;
 		ConcurrentNavigableMap<String, Node> nodeMap = rootNode.getNextLayer();
+		Node node = rootNode;
 		while (len < key.length()) {
-			String curChunk = key.substring(len, Math.min(len + chunkSize,key.length()));
-			Node node = nodeMap.get(curChunk);
-			if(node == null){
-				return null;
-			}
 			nodeMap = node.getNextLayer();
 			if (nodeMap == null) {
 				return null;
 			}
+			String curChunk = key.substring(len, Math.min(len + chunkSize,key.length()));
+			node = nodeMap.get(curChunk);
+			if(node == null){
+				return null;
+			}
 			len += chunkSize;
 		}
-		Node result = nodeMap.get(key.substring(len - chunkSize, len));
+		Node result = nodeMap.get(key.substring(len - chunkSize, Math.min(len,key.length())));
 		if (result == null) {
 			return null;
 		} else {
@@ -71,8 +72,23 @@ public class HBTree {
 	public static void printHBTree(Node node){
 		Queue<Node> queue = new LinkedList<Node>();
 		queue.add(node);
+		queue.add(null);
 		while(!queue.isEmpty()){
-			
+			Node curNode = queue.poll();
+			if(curNode==null){
+				if(queue.isEmpty()){
+					return;
+				}
+				System.out.println();
+				continue;
+			}
+			ConcurrentNavigableMap<String, Node> nodeMap = curNode.getNextLayer();
+			for(Entry<String,Node> entry:nodeMap.entrySet()){
+				queue.add(entry.getValue());
+				System.out.print(entry.getKey()+"("+entry.getValue().isValue()+"),");
+			}
+			queue.add(null);
+			System.out.print("    ");
 		}
 	}
 	
