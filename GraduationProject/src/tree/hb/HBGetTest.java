@@ -33,14 +33,16 @@ public class HBGetTest{
 			if(str==null){
 				break;
 			}
-			String key = str.split(" ")[0];
-			this.hbtree.get(key);
+			this.hbtree.get(str.split(" ")[0]);
+			
+//			String key = str.split(" ")[0];
+//			this.hbtree.get(key);
 			
 //			String value1 = s.split(" ")[1];
 //			Value v = this.hbtree.get(key);
 //			String value2 = v==null?"null":v.getValue();
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value1 = "+value1+" , value2 = "+value2);
-			totalNum++;
+//			totalNum++;
 		}
 		Long e = System.currentTimeMillis();
 //		System.out.println("Total number: "+totalNum);

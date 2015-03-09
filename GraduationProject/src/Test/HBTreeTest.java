@@ -8,32 +8,31 @@ import tree.hb.HBTree;
 import tree.hb.HBPutTest;
 
 public class HBTreeTest {
-	public static void main(String[] args) throws IOException{
-
-		Comparator<String> c = new Comparator<String>(){
-			@Override
-			public int compare(String o1, String o2) {
-				if(o1.compareTo(o2)<0){
-					return -1;
-				}else if(o1.compareTo(o2)==0){
-					return 0;
-				}
-				return 1;
+	Comparator<String> c = new Comparator<String>(){
+		@Override
+		public int compare(String o1, String o2) {
+			if(o1.compareTo(o2)<0){
+				return -1;
+			}else if(o1.compareTo(o2)==0){
+				return 0;
 			}
-		};
-		String filePath = "d:/500w.txt";
-//		int chunkSize[] ={2,4,6,8,16,24};
-		int chunkSize[] ={24};
-		
-		for(int cs:chunkSize){
-			HBTree hbtree= new HBTree(c,cs);
-			System.out.println("chunkSize = "+cs);
-			HBPutTest pt = new HBPutTest(hbtree,filePath);
-			pt.doPut();
-		
-			HBGetTest pg = new HBGetTest(hbtree,filePath);
-			pg.doGet();	
+			return 1;
 		}
+	};
+	public void test(int chunkSize,String filePath) throws IOException{
+		HBTree hbtree= new HBTree(c,chunkSize);
+		HBPutTest pt = new HBPutTest(hbtree,filePath);
+		pt.doPut();
 		
+		HBGetTest pg = new HBGetTest(hbtree,filePath);
+		pg.doGet();	
+	}
+	
+	public static void main(String[] args) throws IOException, InterruptedException{
+		HBTreeTest hbt = new HBTreeTest();
+		int chunkSize = 1;
+		String filePath = "d:/500w.txt";
+
+		hbt.test(chunkSize,filePath);
 	}
 }

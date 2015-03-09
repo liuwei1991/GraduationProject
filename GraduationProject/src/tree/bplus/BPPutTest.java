@@ -33,10 +33,11 @@ public class BPPutTest {
 			if(str==null){
 				break;
 			}
-			String key = str.split(" ")[0];
-			String value = str.split(" ")[1];
+//			String key = str.split(" ")[0];
+//			String value = str.split(" ")[1];
+			String[] line = str.split(" ");
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
-			this.bskl.add(key, new Value(value));
+			this.bskl.add(line[0], new Value(line[1]));
 			totalNum++;
 		}
 		Long e = System.currentTimeMillis();

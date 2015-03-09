@@ -38,7 +38,7 @@ public class BPGetTest {
 //			String value = str.split(" ")[1];
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
 			this.bskl.get(key);
-			totalNum++;
+//			totalNum++;
 		}
 		Long e = System.currentTimeMillis();
 		System.out.println("BSkipList - PutTest - total number: "+totalNum+" , Total time: "+(e-s)/1000.0+"s. Speed:"+totalNum*1000.0/(e-s)+" /second.");

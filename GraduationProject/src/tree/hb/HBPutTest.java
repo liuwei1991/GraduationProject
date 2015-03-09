@@ -33,12 +33,11 @@ public class HBPutTest {
 			if(str==null){
 				break;
 			}
-			String key = str.split(" ")[0];
-			String value = str.split(" ")[1];
+			String[] line = str.split(" ");
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
-			this.hbtree.add(key, new Value(value));
-			totalNum++;
-//			if(totalNum%100000==0){
+			this.hbtree.add(line[0], new Value(line[1]));
+//			totalNum++;
+//			if(totalNum%200000==0){
 //				System.out.println("Total num: "+totalNum);
 //			}
 		}
