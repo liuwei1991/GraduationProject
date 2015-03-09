@@ -3,6 +3,7 @@ package Test;
 import java.io.IOException;
 import java.util.Comparator;
 
+import tree.bplus.BPGetTest;
 import tree.bplus.BPlus;
 import tree.bplus.BPPutTest;
 
@@ -21,9 +22,13 @@ public class BPlusTest {
 				return 1;
 			}
 		};
+		String filePath = "d:/500w.txt";
 		BPlus bskl= new BPlus(c);
-		BPPutTest pt = new BPPutTest(bskl,"d:/a.txt");
+		
+		BPPutTest pt = new BPPutTest(bskl,filePath);
 		pt.doPut();
 		
+		BPGetTest bgt = new BPGetTest(bskl,filePath);
+		bgt.doGet();
 	}
 }

@@ -21,11 +21,19 @@ public class HBTreeTest {
 				return 1;
 			}
 		};
-		HBTree hbtree= new HBTree(c);
-		HBPutTest pt = new HBPutTest(hbtree,"d:/a.txt");
-		pt.doPut();
-	
-		HBGetTest pg = new HBGetTest(hbtree,"d:/a.txt");
-		pg.doGet();
+		String filePath = "d:/500w.txt";
+//		int chunkSize[] ={2,4,6,8,16,24};
+		int chunkSize[] ={24};
+		
+		for(int cs:chunkSize){
+			HBTree hbtree= new HBTree(c,cs);
+			System.out.println("chunkSize = "+cs);
+			HBPutTest pt = new HBPutTest(hbtree,filePath);
+			pt.doPut();
+		
+			HBGetTest pg = new HBGetTest(hbtree,filePath);
+			pg.doGet();	
+		}
+		
 	}
 }

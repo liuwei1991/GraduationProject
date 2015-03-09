@@ -38,6 +38,9 @@ public class HBPutTest {
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
 			this.hbtree.add(key, new Value(value));
 			totalNum++;
+//			if(totalNum%100000==0){
+//				System.out.println("Total num: "+totalNum);
+//			}
 		}
 		Long e = System.currentTimeMillis();
 		System.out.println("HBTree - PutTest - total number: "+totalNum+" , Total time: "+(e-s)/1000.0+"s. Speed:"+totalNum*1000.0/(e-s)+" /second.");
@@ -57,8 +60,12 @@ public class HBPutTest {
 				return 1;
 			}
 		};
-		HBTree hbtree= new HBTree(c);
-		HBPutTest pt = new HBPutTest(hbtree,"d:/a.txt");
+		
+		int chunkSize = 8;
+		String filePath =  "d:/a.txt";
+		
+		HBTree hbtree= new HBTree(c,chunkSize);
+		HBPutTest pt = new HBPutTest(hbtree,filePath);
 		pt.doPut();
 	}
 	

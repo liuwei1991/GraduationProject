@@ -50,7 +50,11 @@ public class DataGen {
 	}
 	
 	public static void main(String[] args) throws IOException{
-		DataGen dg = new DataGen(20,16,"d:/a.txt");
+		int totalNum = 5000000;
+		int keylen = 16;
+		String filePath = "d:/a.txt";
+		
+		DataGen dg = new DataGen(totalNum,keylen,filePath);
 		dg.genData();
 	}
 }

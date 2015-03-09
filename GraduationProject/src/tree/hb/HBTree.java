@@ -19,8 +19,9 @@ public class HBTree {
 //		this.delegatee.ceilingEntry(key)
 	}
 	
-	public HBTree(final Comparator c) {
+	public HBTree(final Comparator c,final int chunkSize) {
 		this.c = c;
+		this.chunkSize = chunkSize;
 		rootNode = new Node();
 		rootNode.setNextLayer(new ConcurrentSkipListMap<String, Node>(c));
 	}
