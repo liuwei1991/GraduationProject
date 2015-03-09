@@ -17,7 +17,7 @@ public class PutTest {
 		this.inPutFilePath = inPutFilePath;
 	}
 	
-	public void doInput() throws IOException{
+	public void doPut() throws IOException{
 		File file = new File(this.inPutFilePath);
 		if(!file.exists()){
 			System.out.println("Input file is not found!");
@@ -59,7 +59,7 @@ public class PutTest {
 		};
 		HBTree hbtree= new HBTree(c);
 		PutTest pt = new PutTest(hbtree,"d:/a.txt");
-		pt.doInput();
+		pt.doPut();
 	}
 	
 }

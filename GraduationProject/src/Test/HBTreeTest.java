@@ -24,7 +24,7 @@ public class HBTreeTest {
 		};
 		HBTree hbtree= new HBTree(c);
 		PutTest pt = new PutTest(hbtree,"d:/a.txt");
-		pt.doInput();
+		pt.doPut();
 	
 		GetTest pg = new GetTest(hbtree,"d:/a.txt");
 		pg.doGet();

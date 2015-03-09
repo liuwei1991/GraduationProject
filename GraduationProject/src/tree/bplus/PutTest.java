@@ -17,7 +17,7 @@ public class PutTest {
 		this.inPutFilePath = inPutFilePath;
 	}
 	
-	public void doInput() throws IOException{
+	public void doPut() throws IOException{
 		File file = new File(this.inPutFilePath);
 		if(!file.exists()){
 			System.out.println("Input file is not found!");
@@ -57,7 +57,7 @@ public class PutTest {
 		};
 		BSkipList bskl= new BSkipList(c);
 		PutTest pt = new PutTest(bskl,"d:/a.txt");
-		pt.doInput();
+		pt.doPut();
 	}
 	
 
