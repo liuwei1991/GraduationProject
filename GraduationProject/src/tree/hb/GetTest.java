@@ -33,28 +33,13 @@ public class GetTest{
 				break;
 			}
 			String key = s.split(" ")[0];
-			String value = s.split(" ")[1];
-			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
-			this.hbtree.add(key, new Value(value));
+			String value1 = s.split(" ")[1];
+			Value v = this.hbtree.get(key);
+			String value2 = v==null?"null":v.getValue();
+			System.out.println("key = "+key+" , keylen = "+key.length()+" , value1 = "+value1+" , value2 = "+value2);
 			totalNum++;
 		}
 		System.out.println("Total number: "+totalNum);
 	}
 	
-	public static void main(String[] args) throws IOException{
-		Comparator<String> c = new Comparator<String>(){
-
-			@Override
-			public int compare(String o1, String o2) {
-				if(o1.compareTo(o2)<0){
-					return -1;
-				}
-				return 1;
-			}
-		};
-		HBTree hbtree= new HBTree(c);
-		GetTest pg = new GetTest(hbtree,"d:/a.txt");
-		pg.doGet();
-	}
-
 }

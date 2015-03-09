@@ -29,8 +29,12 @@ public class HBTree {
 		int len = 0;
 		ConcurrentNavigableMap<String, Node> nodeMap = rootNode.getNextLayer();
 		while (len < key.length()) {
-			String curChunk = key.substring(len, len + chunkSize);
-			nodeMap = nodeMap.get(curChunk).getNextLayer();
+			String curChunk = key.substring(len, Math.min(len + chunkSize,key.length()));
+			Node node = nodeMap.get(curChunk);
+			if(node == null){
+				return null;
+			}
+			nodeMap = node.getNextLayer();
 			if (nodeMap == null) {
 				return null;
 			}

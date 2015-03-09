@@ -8,13 +8,11 @@ import java.util.Comparator;
 
 import common.Value;
 
-import Test.BSkipListTest;
-
 public class PutTest {
-	private BSkipListTest bskl;
+	private BSkipList bskl;
 	private String inPutFilePath;
 	
-	public PutTest(BSkipListTest bskl,String inPutFilePath){
+	public PutTest(BSkipList bskl,String inPutFilePath){
 		this.bskl = bskl;
 		this.inPutFilePath = inPutFilePath;
 	}
@@ -55,7 +53,7 @@ public class PutTest {
 				return 1;
 			}
 		};
-		BSkipListTest bskl= new BSkipListTest(c);
+		BSkipList bskl= new BSkipList(c);
 		PutTest pt = new PutTest(bskl,"d:/a.txt");
 		pt.doInput();
 	}
