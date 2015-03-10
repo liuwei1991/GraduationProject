@@ -1,4 +1,4 @@
-package Test;
+package test.singleThread;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -7,7 +7,7 @@ import tree.hb.HBGetTest;
 import tree.hb.HBTree;
 import tree.hb.HBPutTest;
 
-public class HBTreeTest {
+public class HBTreeSingleThreadTest {
 	Comparator<String> c = new Comparator<String>(){
 		@Override
 		public int compare(String o1, String o2) {
@@ -29,7 +29,7 @@ public class HBTreeTest {
 	}
 	
 	public static void main(String[] args) throws IOException, InterruptedException{
-		HBTreeTest hbt = new HBTreeTest();
+		HBTreeSingleThreadTest hbt = new HBTreeSingleThreadTest();
 		int chunkSize = 8;
 		String filePath = "D:/TestData/t2/keylen=16/1000w.txt";
 
