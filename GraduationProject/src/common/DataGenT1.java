@@ -21,7 +21,7 @@ public class DataGenT1 {
 	}
 	
 	public void genData() throws IOException{
-		File file = new File(this.filePath);
+		File file = new File(this.filePath+".txt");
 		
 		if(file.exists()){
 			System.out.println("File exists, newly created.");
@@ -49,13 +49,50 @@ public class DataGenT1 {
 		System.out.println("Number: "+totalNum);
 	}
 	
+	public void genData(int fileNum) throws IOException{
+		int numPerFile = this.num/num;
+		int base = (int) Math.pow(10.0, this.keyLen/4.0-1);
+		int n = (int) Math.pow(this.num/1.0, 4.0/this.keyLen)+1;
+
+		int totalNum = 0;
+		for(int curNum=0;curNum<fileNum;curNum++){
+			File file = new File(this.filePath+"/"+curNum+".txt");
+			
+			if(file.exists()){
+				System.out.println("File exists, newly created.");
+			}
+			file.createNewFile();
+			FileWriter fw = new FileWriter(file);
+			BufferedWriter bw = new BufferedWriter(fw);
+			Random r = new Random();
+			
+			for(int i=0;i<numPerFile;i++){
+				String rowKey = "";
+				String value = "";
+				for(int j=0;j<keyLen/4;j++){
+					rowKey += String.valueOf(base+r.nextInt(n));
+				}
+				value = String.valueOf(base+r.nextInt(n));
+				bw.write(rowKey+" "+value+"\r\n");
+				totalNum++;
+			}
+			bw.flush();
+			bw.close();
+			fw.close();
+			System.out.println("File-"+curNum+" number: "+numPerFile);
+		}
+		System.out.println("Total number: "+totalNum);
+	}
+	
+
+	
 	public static void main(String[] args) throws IOException{
 		int base = 10000;
 		int totalNum = 1500;
 		int keylen = 16;
-		String filePath = "D:/TestData/t1/"+totalNum+"w.txt";
+		String filePath = "D:/TestData/t1/"+totalNum+"w";
 		for(int i=7;i<=10;i++){
-			DataGenT1 dg = new DataGenT1(500*i*base,keylen,"D:/TestData/t1/"+500*i+"w.txt");
+			DataGenT1 dg = new DataGenT1(500*i*base,keylen,"D:/TestData/t1/"+500*i+"w");
 			dg.genData();
 		}
 //		DataGen dg = new DataGen(totalNum*base,keylen,filePath);
