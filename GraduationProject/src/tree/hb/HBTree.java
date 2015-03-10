@@ -43,7 +43,7 @@ public class HBTree {
 			len += chunkSize;
 		}
 		Node result = nodeMap.get(key.substring(len - chunkSize, Math.min(len,key.length())));
-		if (result == null) {
+		if (result == null || !result.isValue()) {
 			return null;
 		} else {
 			return result.getValue();

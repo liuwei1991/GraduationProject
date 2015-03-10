@@ -9,12 +9,12 @@ import java.util.Random;
 /*
  * github: https://github.com/liuwei1991/GraduationProject.git
  */
-public class DataGen {
+public class DataGenT1 {
 	int num = 0;
 	int keyLen = 8;
 	String filePath = "";
 	
-	public DataGen(int num,int keyLen,String filePath){
+	public DataGenT1(int num,int keyLen,String filePath){
 		this.num = num;
 		this.keyLen = keyLen;
 		this.filePath = filePath;
@@ -53,9 +53,9 @@ public class DataGen {
 		int base = 10000;
 		int totalNum = 1500;
 		int keylen = 16;
-		String filePath = "d:/"+totalNum+"w.txt";
-		for(int i=3;i<=6;i++){
-			DataGen dg = new DataGen(500*i*base,keylen,"d:/"+500*i+"w.txt");
+		String filePath = "D:/TestData/t1/"+totalNum+"w.txt";
+		for(int i=7;i<=10;i++){
+			DataGenT1 dg = new DataGenT1(500*i*base,keylen,"D:/TestData/t1/"+500*i+"w.txt");
 			dg.genData();
 		}
 //		DataGen dg = new DataGen(totalNum*base,keylen,filePath);
