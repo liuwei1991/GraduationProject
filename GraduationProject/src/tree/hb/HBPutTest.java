@@ -37,7 +37,7 @@ public class HBPutTest {
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
 			this.hbtree.add(line[0], new Value(line[1]));
 //			totalNum++;
-//			if(totalNum%200000==0){
+//			if(totalNum%1000000==0){
 //				System.out.println("Total num: "+totalNum);
 //			}
 		}

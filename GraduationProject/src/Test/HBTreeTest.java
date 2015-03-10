@@ -30,8 +30,8 @@ public class HBTreeTest {
 	
 	public static void main(String[] args) throws IOException, InterruptedException{
 		HBTreeTest hbt = new HBTreeTest();
-		int chunkSize = 16;
-		String filePath = "D:/TestData/t2/keylen=16/1500w.txt";
+		int chunkSize = 8;
+		String filePath = "D:/TestData/t2/keylen=16/1000w.txt";
 
 		hbt.test(chunkSize,filePath);
 	}

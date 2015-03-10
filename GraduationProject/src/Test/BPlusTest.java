@@ -32,7 +32,7 @@ public class BPlusTest {
 	
 	public static void main(String[] args) throws IOException {
 		BPlusTest bpt = new BPlusTest();
-		String filePath = "D:/TestData/t2/keylen=16/1500w.txt";
+		String filePath = "D:/TestData/t2/keylen=16/1000w.txt";
 		
 		bpt.test(filePath);
 	}
