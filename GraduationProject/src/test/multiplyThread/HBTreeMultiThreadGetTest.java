@@ -6,18 +6,18 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
 
-import common.Value;
 import tree.bplus.BPlus;
+import tree.hb.HBTree;
+import common.Value;
 
-public class BPlusMultiThreadGetTest implements Runnable {
-
-	private BPlus bskl;
-	private String inputFilePath;
+public class HBTreeMultiThreadGetTest implements Runnable{
+	private HBTree hbtree;
+	private String inputFilePath ;
 	private int threadNum;
 	private static int totalNum = 0;
 	
-	public BPlusMultiThreadGetTest(BPlus bskl, String inputFilePath,int threadNum) {
-		this.bskl = bskl;
+	public HBTreeMultiThreadGetTest(HBTree hbtree, String inputFilePath,int threadNum) {
+		this.hbtree = hbtree;
 		this.inputFilePath = inputFilePath;
 		this.threadNum = threadNum;
 	}
@@ -38,7 +38,7 @@ public class BPlusMultiThreadGetTest implements Runnable {
 					break;
 				}
 				String[] line = str.split(" ");
-				this.bskl.add(line[0], new Value(line[1]));
+				this.hbtree.add(line[0], new Value(line[1]));
 			}
 		}
 	}
@@ -63,7 +63,7 @@ public class BPlusMultiThreadGetTest implements Runnable {
 //					break;
 				}
 				String key = str.split(" ")[0];
-				this.bskl.get(key);
+				this.hbtree.get(key);
 				synchronized (BPlusMultiThreadPutTest.class) {
 					totalNum++;
 				}
@@ -85,7 +85,7 @@ public class BPlusMultiThreadGetTest implements Runnable {
 					sleep(5000);
 					long current = totalNum;
 					System.out
-							.println("BPlusGet - Start Time:" + time + "\tNow:"
+							.println("HBTreeGet - Start Time:" + time + "\tNow:"
 									+ System.currentTimeMillis() + "\tgetNum :"
 									+ current + "\tCurrent Speed:"
 									+ ((current - lastNum) * 1000)
@@ -119,18 +119,18 @@ public class BPlusMultiThreadGetTest implements Runnable {
 			}
 		};
 
+		int chunkSize = 8;
 		String inputFilePath = "D:/TestData/t2/keylen=16/";
 		int threadNum = 10;
-
-		BPlus bp = new BPlus(c);
-		BPlusMultiThreadGetTest btg = new BPlusMultiThreadGetTest(bp,
+		
+		HBTree hbtree = new HBTree(c,chunkSize);
+		HBTreeMultiThreadGetTest hbtg = new HBTreeMultiThreadGetTest(hbtree,
 				inputFilePath,threadNum);
-		btg.put();
+		hbtg.put();
 		for (int i = 0; i < threadNum; i++) {
-			Thread t = new Thread(btg);
+			Thread t = new Thread(hbtg);
 			t.setName(String.valueOf(i));
 			t.start();
 		}
 	}
-
 }

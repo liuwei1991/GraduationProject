@@ -5,19 +5,21 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Comparator;
 
-import common.Value;
 import tree.bplus.BPlus;
+import tree.hb.HBPutTest;
+import tree.hb.HBTree;
+import common.Value;
 
-public class BPlusMultiThreadPutTest implements Runnable{
-	private BPlus bskl;
-	private String inputFilePath;
+public class HBTreeMultiThreadPutTest implements Runnable{
+	private HBTree hbtree;
+	private String inputFilePath ;
 	private static int totalNum = 0;
 	
-	public BPlusMultiThreadPutTest(BPlus bskl,String inputFilePath){
-		this.bskl = bskl;
+	public HBTreeMultiThreadPutTest(HBTree hbtree,String inputFilePath){
+		this.hbtree = hbtree;
 		this.inputFilePath = inputFilePath;
 	}
-
+	
 	@Override
 	public void run() {
 		String id = Thread.currentThread().getName();
@@ -35,7 +37,7 @@ public class BPlusMultiThreadPutTest implements Runnable{
 					break;
 				}
 				String[] line = str.split(" ");
-				this.bskl.add(line[0], new Value(line[1]));
+				this.hbtree.add(line[0], new Value(line[1]));
 				synchronized(BPlusMultiThreadPutTest.class){
 					totalNum++;
 				}
@@ -56,7 +58,7 @@ public class BPlusMultiThreadPutTest implements Runnable{
 				try {
 					sleep(5000);
 					long current = totalNum;
-			        System.out.println("BPlusPut - Start Time:" + time + "\tNow:"
+			        System.out.println("HBTreePut - Start Time:" + time + "\tNow:"
 			            + System.currentTimeMillis() + "\tputNum :" + current
 			            + "\tCurrent Speed:" + ((current - lastNum) * 1000)
 			            / (System.currentTimeMillis() - time) + "\tTotal Speed:"
@@ -88,13 +90,15 @@ public class BPlusMultiThreadPutTest implements Runnable{
 				return 1;
 			}
 		};
-		String inputFilePath = "D:/TestData/t2/keylen=16/";
-		int threadNum = 10; 
 		
-		BPlus bp = new BPlus(c);
-		BPlusMultiThreadPutTest btp = new BPlusMultiThreadPutTest(bp,inputFilePath);
-		for(int i=0;i<10;i++){
-			Thread t =  new Thread(btp);
+		String inputFilePath = "D:/TestData/t2/keylen=16/";
+		int chunkSize = 8;
+		int threadNum = 10;
+		
+		HBTree hbtree= new HBTree(c,chunkSize);
+		HBTreeMultiThreadPutTest hbtp = new HBTreeMultiThreadPutTest(hbtree,inputFilePath);
+		for(int i=0;i<threadNum;i++){
+			Thread t =  new Thread(hbtp);
 			t.setName(String.valueOf(i));
 			t.start();
 		}
