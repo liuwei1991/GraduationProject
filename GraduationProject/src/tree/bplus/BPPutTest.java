@@ -10,15 +10,15 @@ import common.Value;
 
 public class BPPutTest {
 	private BPlus bskl;
-	private String inPutFilePath;
+	private String inputFilePath;
 	
-	public BPPutTest(BPlus bskl,String inPutFilePath){
+	public BPPutTest(BPlus bskl,String inputFilePath){
 		this.bskl = bskl;
-		this.inPutFilePath = inPutFilePath;
+		this.inputFilePath = inputFilePath;
 	}
 	
 	public void doPut() throws IOException{
-		File file = new File(this.inPutFilePath);
+		File file = new File(this.inputFilePath);
 		if(!file.exists()){
 			System.out.println("Input file is not found!");
 			return;
