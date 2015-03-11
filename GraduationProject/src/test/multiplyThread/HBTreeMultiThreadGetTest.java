@@ -59,12 +59,14 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 				String str = br.readLine();
 				// if reach the end of the file, the start from the begin of the file.
 				if (str == null) {
+					fr = new FileReader(file);
 					br = new BufferedReader(fr);
+					continue;
 //					break;
 				}
 				String key = str.split(" ")[0];
 				this.hbtree.get(key);
-				synchronized (BPlusMultiThreadPutTest.class) {
+				synchronized (HBTreeMultiThreadGetTest.class) {
 					totalNum++;
 				}
 			}
@@ -82,15 +84,15 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 		public void run() {
 			while (true) {
 				try {
-					sleep(5000);
+					sleep(2000);
 					long current = totalNum;
 					System.out
-							.println("HBTreeGet - Start Time:" + time + "\tNow:"
-									+ System.currentTimeMillis() + "\tgetNum :"
-									+ current + "\tCurrent Speed:"
+							.println("HBTreeGet - StartTime:" + time + "  Now:"
+									+ System.currentTimeMillis() + " getNum :"
+									+ current + "  CurrentSpeed:"
 									+ ((current - lastNum) * 1000)
 									/ (System.currentTimeMillis() - time)
-									+ "\tTotal Speed:" + (current * 1000)
+									+ "  TotalSpeed:" + (current * 1000)
 									/ (System.currentTimeMillis() - startTime)
 									+ " r/s");
 					time = System.currentTimeMillis();
@@ -119,8 +121,8 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 			}
 		};
 
-		int chunkSize = 8;
-		String inputFilePath = "D:/TestData/t2/keylen=16/";
+		String inputFilePath = "D:/TestData/t2/keylen=16/500w/";
+		int chunkSize = 4;
 		int threadNum = 10;
 		
 		HBTree hbtree = new HBTree(c,chunkSize);

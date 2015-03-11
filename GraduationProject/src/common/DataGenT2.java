@@ -49,10 +49,12 @@ public class DataGenT2 {
 	}
 	
 	public void genData(int fileNum) throws IOException{
-		int numPerFile = this.num/num;
+		int numPerFile = this.num/fileNum;
 		int totalNum = 0;
+		File file = new File(this.filePath);
+		file.mkdir();
 		for(int curNum=0;curNum<fileNum;curNum++){
-			File file = new File(this.filePath+"/"+curNum+".txt");
+			file = new File(this.filePath+"/"+curNum+".txt");
 			
 			if(file.exists()){
 				System.out.println("File exists, newly created.");
@@ -82,13 +84,20 @@ public class DataGenT2 {
 	
 	public static void main(String[] args) throws IOException{
 		int base = 10000;
-		int keylen[] = {24,32};
+		int keylen[] = {8,16,24};
 		
-		for(int len:keylen){
-			for(int i=1;i<=10;i++){
-				DataGenT2 dg = new DataGenT2(500*i*base,len,"D:/TestData/t2/keylen="+len+"/"+500*i+"w");
-				dg.genData();
-			}
-		}
+//		for(int len:keylen){
+//			for(int i=1;i<=10;i++){
+//				DataGenT2 dg = new DataGenT2(500*i*base,len,"D:/TestData/t2/keylen="+len+"/"+500*i+"w");
+//				dg.genData(threadNum);
+//			}
+//		}
+		
+		int totalNum = 1500;
+		int threadNum = 10;
+		
+		DataGenT2 dg = new DataGenT2(totalNum*base,16,"D:/TestData/t2/keylen=16/"+totalNum+"w");
+		dg.genData(threadNum);
+		
 	}
 }

@@ -59,12 +59,14 @@ public class BPlusMultiThreadGetTest implements Runnable {
 				String str = br.readLine();
 				// if reach the end of the file, the start from the begin of the file.
 				if (str == null) {
+					fr = new FileReader(file);
 					br = new BufferedReader(fr);
+					continue;
 //					break;
 				}
 				String key = str.split(" ")[0];
 				this.bskl.get(key);
-				synchronized (BPlusMultiThreadPutTest.class) {
+				synchronized (BPlusMultiThreadGetTest.class) {
 					totalNum++;
 				}
 			}
@@ -82,15 +84,15 @@ public class BPlusMultiThreadGetTest implements Runnable {
 		public void run() {
 			while (true) {
 				try {
-					sleep(5000);
+					sleep(2000);
 					long current = totalNum;
 					System.out
-							.println("BPlusGet - Start Time:" + time + "\tNow:"
-									+ System.currentTimeMillis() + "\tgetNum :"
-									+ current + "\tCurrent Speed:"
+							.println("BPlusGet - StartTime:" + time + " Now:"
+									+ System.currentTimeMillis() + " getNum :"
+									+ current + " CurrentSpeed:"
 									+ ((current - lastNum) * 1000)
 									/ (System.currentTimeMillis() - time)
-									+ "\tTotal Speed:" + (current * 1000)
+									+ "  TotalSpeed:" + (current * 1000)
 									/ (System.currentTimeMillis() - startTime)
 									+ " r/s");
 					time = System.currentTimeMillis();
@@ -119,7 +121,7 @@ public class BPlusMultiThreadGetTest implements Runnable {
 			}
 		};
 
-		String inputFilePath = "D:/TestData/t2/keylen=16/";
+		String inputFilePath = "D:/TestData/t2/keylen=16/500w/";
 		int threadNum = 10;
 
 		BPlus bp = new BPlus(c);

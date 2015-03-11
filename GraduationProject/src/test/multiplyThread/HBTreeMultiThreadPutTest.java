@@ -38,7 +38,7 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 				}
 				String[] line = str.split(" ");
 				this.hbtree.add(line[0], new Value(line[1]));
-				synchronized(BPlusMultiThreadPutTest.class){
+				synchronized(HBTreeMultiThreadPutTest.class){
 					totalNum++;
 				}
 			}
@@ -56,12 +56,12 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 		public void run(){
 			while(true){
 				try {
-					sleep(5000);
+					sleep(2000);
 					long current = totalNum;
-			        System.out.println("HBTreePut - Start Time:" + time + "\tNow:"
-			            + System.currentTimeMillis() + "\tputNum :" + current
-			            + "\tCurrent Speed:" + ((current - lastNum) * 1000)
-			            / (System.currentTimeMillis() - time) + "\tTotal Speed:"
+			        System.out.println("HBTreePut - StartTime:" + time + "  Now:"
+			            + System.currentTimeMillis() + "  putNum :" + current
+			            + "  CurrentSpeed:" + ((current - lastNum) * 1000)
+			            / (System.currentTimeMillis() - time) + "  TotalSpeed:"
 			            + (current * 1000) / (System.currentTimeMillis() - startTime)
 			            + " r/s");
 			        time = System.currentTimeMillis();
@@ -91,8 +91,8 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 			}
 		};
 		
-		String inputFilePath = "D:/TestData/t2/keylen=16/";
-		int chunkSize = 8;
+		String inputFilePath = "D:/TestData/t2/keylen=16/1000w/";
+		int chunkSize = 6;
 		int threadNum = 10;
 		
 		HBTree hbtree= new HBTree(c,chunkSize);

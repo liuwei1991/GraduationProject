@@ -54,12 +54,12 @@ public class BPlusMultiThreadPutTest implements Runnable{
 		public void run(){
 			while(true){
 				try {
-					sleep(5000);
+					sleep(2000);
 					long current = totalNum;
-			        System.out.println("BPlusPut - Start Time:" + time + "\tNow:"
-			            + System.currentTimeMillis() + "\tputNum :" + current
-			            + "\tCurrent Speed:" + ((current - lastNum) * 1000)
-			            / (System.currentTimeMillis() - time) + "\tTotal Speed:"
+			        System.out.println("BPlusPut - StartTime:" + time + "  Now:"
+			            + System.currentTimeMillis() + "  putNum :" + current
+			            + "  CurrentSpeed:" + ((current - lastNum) * 1000)
+			            / (System.currentTimeMillis() - time) + "  TotalSpeed:"
 			            + (current * 1000) / (System.currentTimeMillis() - startTime)
 			            + " r/s");
 			        time = System.currentTimeMillis();
@@ -88,12 +88,12 @@ public class BPlusMultiThreadPutTest implements Runnable{
 				return 1;
 			}
 		};
-		String inputFilePath = "D:/TestData/t2/keylen=16/";
+		String inputFilePath = "D:/TestData/t2/keylen=16/1000w/";
 		int threadNum = 10; 
 		
 		BPlus bp = new BPlus(c);
 		BPlusMultiThreadPutTest btp = new BPlusMultiThreadPutTest(bp,inputFilePath);
-		for(int i=0;i<10;i++){
+		for(int i=0;i<threadNum;i++){
 			Thread t =  new Thread(btp);
 			t.setName(String.valueOf(i));
 			t.start();
