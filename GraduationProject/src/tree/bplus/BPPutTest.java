@@ -60,6 +60,4 @@ public class BPPutTest {
 		BPPutTest pt = new BPPutTest(bskl,"d:/a.txt");
 		pt.doPut();
 	}
-	
-
 }
