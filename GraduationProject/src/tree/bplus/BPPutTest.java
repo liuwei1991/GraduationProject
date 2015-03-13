@@ -40,7 +40,7 @@ public class BPPutTest {
 			String[] line = str.split(" ");
 			Map<String,String> kvs = new HashMap<String,String>();
 			for(int i=1;i<line.length;i++){
-				kvs.put("column"+i, line[i]);
+				kvs.put("column"+i, line[0]+","+line[i]);
 			}
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
 			this.bskl.add(line[0], kvs);

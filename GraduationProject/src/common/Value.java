@@ -6,10 +6,6 @@ import java.util.Map;
 public class Value {
 	private Map<String, String> keyValue = new HashMap<String, String>();
 
-//	public Value(String column, String value) {
-//		this.keyValue.put(column, value);
-//	}
-	
 	public Value(Map<String,String> kvs) {
 		this.keyValue.putAll(kvs);
 	}
@@ -25,7 +21,6 @@ public class Value {
 	public void putValue(Map<String,String> kvs){
 		this.keyValue.putAll(kvs);
 	}
-	
 	
 	/*
 	public Value(String value) {

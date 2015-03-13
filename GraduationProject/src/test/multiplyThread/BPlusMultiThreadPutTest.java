@@ -39,7 +39,7 @@ public class BPlusMultiThreadPutTest implements Runnable{
 				String[] line = str.split(" ");
 				Map<String,String> kvs = new HashMap<String,String>();
 				for(int i=1;i<line.length;i++){
-					kvs.put("column"+i, line[i]);
+					kvs.put("column"+i, line[0]+","+line[i]);
 				}
 				this.bskl.add(line[0], kvs);
 				synchronized(BPlusMultiThreadPutTest.class){

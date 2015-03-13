@@ -12,12 +12,14 @@ import java.util.Random;
 public class DataGenT2 {
 	int num = 0;
 	int keyLen = 8;
+	int columnNum = 4;
 	String filePath = "";
 	
-	public DataGenT2(int num,int keyLen,String filePath){
+	public DataGenT2(int num,int keyLen,int columnNum,String filePath){
 		this.num = num;
 		this.keyLen = keyLen;
 		this.filePath = filePath;
+		this.columnNum = columnNum;
 	}
 	
 	public void genData() throws IOException{
@@ -34,12 +36,13 @@ public class DataGenT2 {
 		
 		for(int i=0;i<this.num;i++){
 			String rowKey = "";
-			String value = "";
 			for(int j=0;j<keyLen;j++){
 				rowKey += String.valueOf(r.nextInt(10));
 			}
-			value = String.valueOf(r.nextInt(10000));
-			bw.write(rowKey+" "+value+"\r\n");
+			for(int j=0;j<this.columnNum;j++){
+				rowKey+=" "+r.nextInt(10000);
+			}
+			bw.write(rowKey+"\r\n");
 			totalNum++;
 		}
 		bw.flush();
@@ -66,12 +69,13 @@ public class DataGenT2 {
 			
 			for(int i=0;i<numPerFile;i++){
 				String rowKey = "";
-				String value = "";
 				for(int j=0;j<keyLen;j++){
 					rowKey += String.valueOf(r.nextInt(10));
 				}
-				value = String.valueOf(r.nextInt(10000));
-				bw.write(rowKey+" "+value+"\r\n");
+				for(int j=0;j<this.columnNum;j++){
+					rowKey+=" "+r.nextInt(10000);
+				}
+				bw.write(rowKey+"\r\n");
 				totalNum++;
 			}
 			bw.flush();
@@ -96,7 +100,7 @@ public class DataGenT2 {
 		int totalNum = 1500;
 		int threadNum = 10;
 		
-		DataGenT2 dg = new DataGenT2(totalNum*base,16,"D:/TestData/t2/keylen=16/"+totalNum+"w");
+		DataGenT2 dg = new DataGenT2(totalNum*base,16,4,"D:/TestData/t2/keylen=16/"+totalNum+"w");
 		dg.genData(threadNum);
 		
 	}
