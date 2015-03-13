@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import common.Value;
 import tree.bplus.BPlus;
@@ -36,7 +38,9 @@ public class BPlusMultiThreadPutTest implements Runnable{
 				}
 				String[] line = str.split(" ");
 				String column = "q1";
-				this.bskl.add(line[0], column,line[1]);
+				Map<String,String> kvs = new HashMap<String,String>();
+				kvs.put(column, line[1]);
+				this.bskl.add(line[0], kvs);
 				synchronized(BPlusMultiThreadPutTest.class){
 					totalNum++;
 				}

@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import common.Value;
 
@@ -35,8 +37,10 @@ public class HBPutTest {
 			}
 			String[] line = str.split(" ");
 			String column = "q1";
+			Map<String,String> kvs = new HashMap<String,String>();
+			kvs.put(column, line[1]);
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
-			this.hbtree.add(line[0], column,line[1]);
+			this.hbtree.add(line[0], kvs);
 //			totalNum++;
 //			if(totalNum%1000000==0){
 //				System.out.println("Total num: "+totalNum);

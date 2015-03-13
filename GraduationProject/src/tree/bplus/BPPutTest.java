@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import common.Value;
 
@@ -37,8 +39,10 @@ public class BPPutTest {
 //			String value = str.split(" ")[1];
 			String[] line = str.split(" ");
 			String column = "q1";
+			Map<String,String> kvs = new HashMap<String,String>();
+			kvs.put(column, line[1]);
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
-			this.bskl.add(line[0], column,line[1]);
+			this.bskl.add(line[0], kvs);
 			totalNum++;
 		}
 		Long e = System.currentTimeMillis();

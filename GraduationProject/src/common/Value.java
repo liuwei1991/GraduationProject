@@ -6,16 +6,24 @@ import java.util.Map;
 public class Value {
 	private Map<String, String> keyValue = new HashMap<String, String>();
 
-	public Value(String column, String value) {
-		this.keyValue.put(column, value);
+//	public Value(String column, String value) {
+//		this.keyValue.put(column, value);
+//	}
+	
+	public Value(Map<String,String> kvs) {
+		this.keyValue.putAll(kvs);
 	}
 	
 	public String getValue(String column){
 		return this.keyValue.get(column);
 	}
 
-	public void setValue(String cloumn,String value){
+	public void putValue(String cloumn,String value){
 		this.keyValue.put(cloumn, value);
+	}
+	
+	public void putValue(Map<String,String> kvs){
+		this.keyValue.putAll(kvs);
 	}
 	
 	

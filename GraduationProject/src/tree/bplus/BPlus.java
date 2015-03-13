@@ -3,6 +3,7 @@ package tree.bplus;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NavigableSet;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentNavigableMap;
@@ -34,8 +35,12 @@ public class BPlus {
 		return this.delegatee.get(this.delegatee.lastKey());
 	}
 
-	public boolean add(String key,String column,String value) {
-		return this.delegatee.put(key, new Value(column,key+","+value)) == null;
+	public boolean add(String key,Map<String,String> kvs) {
+		//TODO Should put to the old Value instead of creating a new one.
+		if(this.delegatee.containsKey(key)){
+			this.delegatee.get(key).putValue(kvs);
+		}
+		return this.delegatee.put(key, new Value(kvs)) == null;
 	}
 	
 	public String get(String key,String column) {

@@ -2,6 +2,7 @@ package tree.hb;
 
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentNavigableMap;
@@ -50,7 +51,7 @@ public class HBTree {
 		}
 	}
 
-	public boolean add(String key, String column,String value) {
+	public boolean add(String key, Map<String,String> kvs) {
 		int len = 0;
 		ConcurrentNavigableMap<String, Node> nodeMap = rootNode.getNextLayer();
 		Node node = this.rootNode;
@@ -66,7 +67,12 @@ public class HBTree {
 			len += chunkSize;
 		}
 		node.setIsValue(true);
-		node.setValue(new Value(column,value));
+		//TODO should be added to the old Value instead of creating a new one.
+		if(node.getValue()==null){
+			node.setValue(new Value(kvs));
+		}else{
+			node.getValue().putValue(kvs);
+		}
 		return true;
 	}
 
