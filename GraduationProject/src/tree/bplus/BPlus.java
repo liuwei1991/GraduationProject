@@ -36,11 +36,12 @@ public class BPlus {
 	}
 
 	public boolean add(String key,Map<String,String> kvs) {
-		//TODO Should put to the old Value instead of creating a new one.
 		if(this.delegatee.containsKey(key)){
 			this.delegatee.get(key).putValue(kvs);
+			return true;
+		}else{
+			return this.delegatee.put(key, new Value(kvs)) == null;
 		}
-		return this.delegatee.put(key, new Value(kvs)) == null;
 	}
 	
 	public String get(String key,String column) {

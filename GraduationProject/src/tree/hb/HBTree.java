@@ -67,7 +67,6 @@ public class HBTree {
 			len += chunkSize;
 		}
 		node.setIsValue(true);
-		//TODO should be added to the old Value instead of creating a new one.
 		if(node.getValue()==null){
 			node.setValue(new Value(kvs));
 		}else{

@@ -39,9 +39,10 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 					break;
 				}
 				String[] line = str.split(" ");
-				String column = "q1";
 				Map<String,String> kvs = new HashMap<String,String>();
-				kvs.put(column, line[1]);
+				for(int i=1;i<line.length;i++){
+					kvs.put("column"+i, line[i]);
+				}
 				this.hbtree.add(line[0], kvs);
 				synchronized(HBTreeMultiThreadPutTest.class){
 					totalNum++;

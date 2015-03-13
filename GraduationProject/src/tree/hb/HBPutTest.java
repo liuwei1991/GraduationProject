@@ -36,9 +36,10 @@ public class HBPutTest {
 				break;
 			}
 			String[] line = str.split(" ");
-			String column = "q1";
 			Map<String,String> kvs = new HashMap<String,String>();
-			kvs.put(column, line[1]);
+			for(int i=1;i<line.length;i++){
+				kvs.put("column"+i, line[i]);
+			}
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
 			this.hbtree.add(line[0], kvs);
 //			totalNum++;
