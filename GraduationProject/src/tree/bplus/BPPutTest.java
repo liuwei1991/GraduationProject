@@ -36,8 +36,9 @@ public class BPPutTest {
 //			String key = str.split(" ")[0];
 //			String value = str.split(" ")[1];
 			String[] line = str.split(" ");
+			String column = "q1";
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
-			this.bskl.add(line[0], new Value(line[1]));
+			this.bskl.add(line[0], column,line[1]);
 			totalNum++;
 		}
 		Long e = System.currentTimeMillis();

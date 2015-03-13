@@ -38,7 +38,8 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 					break;
 				}
 				String[] line = str.split(" ");
-				this.hbtree.add(line[0], new Value(line[1]));
+				String column = "q1";
+				this.hbtree.add(line[0], column,line[1]);
 			}
 		}
 	}
@@ -65,7 +66,8 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 //					break;
 				}
 				String key = str.split(" ")[0];
-				this.hbtree.get(key);
+				String column = "q1";
+				this.hbtree.get(key,column);
 				synchronized (HBTreeMultiThreadGetTest.class) {
 					totalNum++;
 				}

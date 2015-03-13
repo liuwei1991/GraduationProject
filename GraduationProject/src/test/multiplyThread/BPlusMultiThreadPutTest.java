@@ -35,7 +35,8 @@ public class BPlusMultiThreadPutTest implements Runnable{
 					break;
 				}
 				String[] line = str.split(" ");
-				this.bskl.add(line[0], new Value(line[1]));
+				String column = "q1";
+				this.bskl.add(line[0], column,line[1]);
 				synchronized(BPlusMultiThreadPutTest.class){
 					totalNum++;
 				}

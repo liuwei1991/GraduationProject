@@ -1,25 +1,29 @@
 package common;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Value {
-	private long ts;
-	private String column;
-	private String value;
-	
-	public Value(String column,long ts,String value){
-		this.ts = ts;
-		this.column = column;
-		this.value = value;
+	private Map<String, String> keyValue = new HashMap<String, String>();
+
+	public Value(String column, String value) {
+		this.keyValue.put(column, value);
 	}
 	
-	public Value(String column,String value){
-		this.column = column;
+	public String getValue(String column){
+		return this.keyValue.get(column);
+	}
+
+	public void setValue(String cloumn,String value){
+		this.keyValue.put(cloumn, value);
+	}
+	
+	
+	/*
+	public Value(String value) {
 		this.value = value;
 	}
 
-	public Value(String value){
-		this.value = value;
-	}
-	
 	public long getTs() {
 		return ts;
 	}
@@ -43,5 +47,5 @@ public class Value {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
+   */
 }

@@ -30,10 +30,11 @@ public class HBGetTest{
 		Long s = System.currentTimeMillis();
 		while(true){
 			String str = br.readLine();
+			String column = "q1";
 			if(str==null){
 				break;
 			}
-			this.hbtree.get(str.split(" ")[0]);
+			this.hbtree.get(str.split(" ")[0],column);
 			
 //			String key = str.split(" ")[0];
 //			this.hbtree.get(key);

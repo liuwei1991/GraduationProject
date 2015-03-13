@@ -38,7 +38,8 @@ public class BPlusMultiThreadGetTest implements Runnable {
 					break;
 				}
 				String[] line = str.split(" ");
-				this.bskl.add(line[0], new Value(line[1]));
+				String column = "q1";
+				this.bskl.add(line[0], column,line[1]);
 			}
 		}
 	}
@@ -65,7 +66,8 @@ public class BPlusMultiThreadGetTest implements Runnable {
 //					break;
 				}
 				String key = str.split(" ")[0];
-				this.bskl.get(key);
+				String column = "q1";
+				this.bskl.get(key,column);
 				synchronized (BPlusMultiThreadGetTest.class) {
 					totalNum++;
 				}

@@ -26,7 +26,7 @@ public class HBTree {
 		rootNode.setNextLayer(new ConcurrentSkipListMap<String, Node>(c));
 	}
 
-	public Value get(String key) {
+	public String get(String key,String column) {
 		int len = 0;
 		ConcurrentNavigableMap<String, Node> nodeMap = rootNode.getNextLayer();
 		Node node = rootNode;
@@ -46,11 +46,11 @@ public class HBTree {
 		if (result == null || !result.isValue()) {
 			return null;
 		} else {
-			return result.getValue();
+			return result.getValue().getValue(column);
 		}
 	}
 
-	public boolean add(String key, Value value) {
+	public boolean add(String key, String column,String value) {
 		int len = 0;
 		ConcurrentNavigableMap<String, Node> nodeMap = rootNode.getNextLayer();
 		Node node = this.rootNode;
@@ -66,7 +66,7 @@ public class HBTree {
 			len += chunkSize;
 		}
 		node.setIsValue(true);
-		node.setValue(value);
+		node.setValue(new Value(column,value));
 		return true;
 	}
 

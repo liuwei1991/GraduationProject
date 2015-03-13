@@ -35,9 +35,10 @@ public class BPGetTest {
 				break;
 			}
 			String key = str.split(" ")[0];
+			String column = "q1";
 //			String value = str.split(" ")[1];
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
-			this.bskl.get(key);
+			this.bskl.get(key,column);
 //			totalNum++;
 		}
 		Long e = System.currentTimeMillis();

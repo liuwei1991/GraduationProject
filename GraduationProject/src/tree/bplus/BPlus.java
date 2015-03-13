@@ -34,12 +34,12 @@ public class BPlus {
 		return this.delegatee.get(this.delegatee.lastKey());
 	}
 
-	public boolean add(String e, Value v) {
-		return this.delegatee.put(e, v) == null;
+	public boolean add(String key,String column,String value) {
+		return this.delegatee.put(key, new Value(column,key+","+value)) == null;
 	}
 	
-	public Value get(String key) {
-		return this.delegatee.get(key);
+	public String get(String key,String column) {
+		return this.delegatee.get(key).getValue(column);
 	}
 	
 	public boolean remove(Object o) {
