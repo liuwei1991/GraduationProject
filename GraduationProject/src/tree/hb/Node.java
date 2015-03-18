@@ -8,6 +8,7 @@ public class Node {
 	private ConcurrentSkipListMap<String,Node> nextLayer;
 	private boolean isValue;
 	private Value value;
+	private boolean isLeaf = false;
 	
 	public Node(){
 		this.nextLayer = null;
@@ -38,5 +39,13 @@ public class Node {
 	public void setValue(Value value) {
 		this.value = value;
 	}
-	
+
+	public boolean isLeaf() {
+		return isLeaf;
+	}
+
+	public void setLeaf(boolean isLeaf) {
+		this.isLeaf = isLeaf;
+	}
+
 }

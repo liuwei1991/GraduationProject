@@ -6,6 +6,7 @@ import java.util.Comparator;
 import tree.hb.HBGetTest;
 import tree.hb.HBTree;
 import tree.hb.HBPutTest;
+import tree.hb.HBTreeOptimize;
 
 public class HBTreeSingleThreadTest {
 	Comparator<String> c = new Comparator<String>(){
@@ -19,20 +20,32 @@ public class HBTreeSingleThreadTest {
 			return 1;
 		}
 	};
-	public void test(int chunkSize,String filePath) throws IOException{
-		HBTree hbtree= new HBTree(c,chunkSize);
-		HBPutTest pt = new HBPutTest(hbtree,filePath);
-		pt.doPut();
-		
-		HBGetTest pg = new HBGetTest(hbtree,filePath);
-		pg.doGet();	
+	public void test(int chunkSize,String filePath,boolean optimize) throws IOException{
+		if(optimize){
+			System.out.println("HBTreeSingleThreadTest - Optimize:");
+			HBTreeOptimize hbtreeop = new HBTreeOptimize(c,chunkSize);
+			HBPutTest pt = new HBPutTest(hbtreeop,filePath);
+			pt.doPut();
+			
+			HBGetTest pg = new HBGetTest(hbtreeop,filePath);
+			pg.doGet();	
+		}else{
+			System.out.println("HBTreeSingleThreadTest - Ordinary:");
+			HBTree hbtree= new HBTree(c,chunkSize);
+			HBPutTest pt = new HBPutTest(hbtree,filePath);
+			pt.doPut();
+			
+			HBGetTest pg = new HBGetTest(hbtree,filePath);
+			pg.doGet();	
+		}
 	}
 	
 	public static void main(String[] args) throws IOException, InterruptedException{
 		HBTreeSingleThreadTest hbt = new HBTreeSingleThreadTest();
 		int chunkSize = 8;
+		boolean optimize = false;
 		String filePath = "D:/TestData/t2/keylen=16/1000w.txt";
 
-		hbt.test(chunkSize,filePath);
+		hbt.test(chunkSize,filePath,optimize);
 	}
 }

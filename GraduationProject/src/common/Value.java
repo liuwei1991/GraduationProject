@@ -22,6 +22,10 @@ public class Value {
 		this.keyValue.putAll(kvs);
 	}
 	
+	public Map<String, String> getAllKV(){
+		return this.keyValue;
+	}
+	
 	/*
 	public Value(String value) {
 		this.value = value;

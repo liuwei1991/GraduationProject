@@ -10,6 +10,8 @@ import common.Value;
 
 public class HBGetTest{
 	private HBTree hbtree;
+	private HBTreeOptimize hbtreeop;
+	private boolean isOptimize = false;
 	private String inPutFilePath ;
 	
 	public HBGetTest(HBTree hbtree,String inPutFilePath){
@@ -17,7 +19,21 @@ public class HBGetTest{
 		this.inPutFilePath = inPutFilePath;
 	}
 	
+	public HBGetTest(HBTreeOptimize hbtreeop,String inPutFilePath){
+		this.hbtreeop = hbtreeop;
+		this.inPutFilePath = inPutFilePath;
+		this.isOptimize = true;
+	}
+	
 	public void doGet() throws IOException{
+		if(this.isOptimize){
+			this.doGetOptimize();
+		}else{
+			this.doGetOrdinary();
+		}
+	}
+	
+	public void doGetOrdinary() throws IOException{
 		File file = new File(this.inPutFilePath);
 		if(!file.exists()){
 			System.out.println("Input file is not found!");
@@ -35,6 +51,39 @@ public class HBGetTest{
 				break;
 			}
 			this.hbtree.get(str.split(" ")[0],column);
+			
+//			String key = str.split(" ")[0];
+//			this.hbtree.get(key);
+			
+//			String value1 = s.split(" ")[1];
+//			Value v = this.hbtree.get(key);
+//			String value2 = v==null?"null":v.getValue();
+//			System.out.println("key = "+key+" , keylen = "+key.length()+" , value1 = "+value1+" , value2 = "+value2);
+//			totalNum++;
+		}
+		Long e = System.currentTimeMillis();
+//		System.out.println("Total number: "+totalNum);
+		System.out.println("HBTree - GetTest - total number: "+totalNum+" , Total time: "+(e-s)/1000.0+"s. Speed:"+totalNum*1000.0/(e-s)+" /second.");
+	}
+	
+	public void doGetOptimize() throws IOException{
+		File file = new File(this.inPutFilePath);
+		if(!file.exists()){
+			System.out.println("Input file is not found!");
+			return;
+		}
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		
+		int totalNum = 0;
+		Long s = System.currentTimeMillis();
+		while(true){
+			String str = br.readLine();
+			String column = "q1";
+			if(str==null){
+				break;
+			}
+			this.hbtreeop.get(str.split(" ")[0],column);
 			
 //			String key = str.split(" ")[0];
 //			this.hbtree.get(key);
