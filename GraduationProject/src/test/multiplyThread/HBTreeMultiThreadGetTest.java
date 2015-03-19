@@ -10,6 +10,7 @@ import java.util.Map;
 
 import tree.bplus.BPlus;
 import tree.hb.HBTree;
+import tree.hb.HBTreeOptimize;
 import common.Value;
 
 public class HBTreeMultiThreadGetTest implements Runnable{
@@ -17,6 +18,9 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 	private String inputFilePath ;
 	private int threadNum;
 	private static int totalNum = 0;
+	private HBTreeOptimize hbtreeop;
+	boolean isOptimize = false;
+	
 	
 	public HBTreeMultiThreadGetTest(HBTree hbtree, String inputFilePath,int threadNum) {
 		this.hbtree = hbtree;
@@ -24,7 +28,21 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 		this.threadNum = threadNum;
 	}
 	
+	public HBTreeMultiThreadGetTest(HBTreeOptimize hbtreeop, String inputFilePath,int threadNum) {
+		this.hbtreeop = hbtreeop;
+		this.inputFilePath = inputFilePath;
+		this.threadNum = threadNum;
+	}
+	
 	public void put() throws IOException{
+		if(this.isOptimize){
+			this.putOptimize();
+		}else{
+			this.putOrdinary();
+		}
+	}
+	
+	public void putOrdinary() throws IOException{
 		for(int i=0;i<this.threadNum;i++){
 			File file = new File(this.inputFilePath+i+".txt");
 			if(!file.exists()){
@@ -40,14 +58,42 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 					break;
 				}
 				String[] line = str.split(" ");
-				String column = "q1";
+				String column = "q";
 				Map<String,String> kvs = new HashMap<String,String>();
-				kvs.put(column, line[1]);
+				for(int j=1;j<line.length;j++){
+					kvs.put(column+j, line[j]);
+				}
 				this.hbtree.add(line[0], kvs);
 			}
 		}
 	}
 
+	public void putOptimize() throws IOException{
+		for(int i=0;i<this.threadNum;i++){
+			File file = new File(this.inputFilePath+i+".txt");
+			if(!file.exists()){
+				System.out.println("Input file is not found!");
+				return;
+			}
+			FileReader fr = new FileReader(file);
+			BufferedReader br = new BufferedReader(fr);
+			
+			while(true){
+				String str = br.readLine();
+				if(str==null){
+					break;
+				}
+				String[] line = str.split(" ");
+				String column = "q";
+				Map<String,String> kvs = new HashMap<String,String>();
+				for(int j=1;j<line.length;j++){
+					kvs.put(column+j, line[j]);
+				}
+				this.hbtreeop.add(line[0], kvs);
+			}
+		}
+	}
+	
 	@Override
 	public void run() {
 		String id = Thread.currentThread().getName();
@@ -69,17 +115,18 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 					continue;
 //					break;
 				}
-				String key = str.split(" ")[0];
-				String column = "q1";
-				this.hbtree.get(key,column);
-				synchronized (HBTreeMultiThreadGetTest.class) {
-					totalNum++;
+				String[] lines = str.split(" ");
+				String column = "q";
+				for(int j=1;j<lines.length;j++){
+					this.hbtree.get(lines[0],column+j);
+					synchronized (HBTreeMultiThreadGetTest.class) {
+						totalNum++;
+					}
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	static long time = System.currentTimeMillis();
@@ -130,6 +177,7 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 		String inputFilePath = "D:/TestData/t2/keylen=16/500w/";
 		int chunkSize = 4;
 		int threadNum = 10;
+		boolean optimize = false;
 		
 		HBTree hbtree = new HBTree(c,chunkSize);
 		HBTreeMultiThreadGetTest hbtg = new HBTreeMultiThreadGetTest(hbtree,

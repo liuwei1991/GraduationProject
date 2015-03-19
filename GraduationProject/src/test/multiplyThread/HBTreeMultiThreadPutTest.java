@@ -100,6 +100,7 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 		String inputFilePath = "D:/TestData/t2/keylen=16/1000w/";
 		int chunkSize = 6;
 		int threadNum = 10;
+		boolean optimize = false;
 		
 		HBTree hbtree= new HBTree(c,chunkSize);
 		HBTreeMultiThreadPutTest hbtp = new HBTreeMultiThreadPutTest(hbtree,inputFilePath);

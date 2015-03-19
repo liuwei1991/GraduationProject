@@ -98,7 +98,7 @@ public class HBPutTest {
 		}
 		Long e = System.currentTimeMillis();
 		System.out.println("HBTree - PutTest - total number: "+totalNum+" , Total time: "+(e-s)/1000.0+"s. Speed:"+totalNum*1000.0/(e-s)+" /second.");
-//		HBTree.printHBTree(this.hbtree.rootNode);
+		HBTree.printHBTree(this.hbtreeop.rootNodeOpt);
 	}
 	public static void main(String[] args) throws IOException{
 		Comparator<String> c = new Comparator<String>(){

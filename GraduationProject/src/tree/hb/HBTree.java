@@ -97,6 +97,28 @@ public class HBTree {
 			System.out.print("    ");
 		}
 	}
+	public static void printHBTree(NodeOptimize node){
+		Queue<NodeOptimize> queue = new LinkedList<NodeOptimize>();
+		queue.add(node);
+		queue.add(null);
+		while(!queue.isEmpty()){
+			NodeOptimize curNode = queue.poll();
+			if(curNode==null){
+				if(queue.isEmpty()){
+					return;
+				}
+				System.out.println();
+				continue;
+			}
+			ConcurrentNavigableMap<String, NodeOptimize> nodeMap = curNode.getNextLayer();
+			for(Entry<String,NodeOptimize> entry:nodeMap.entrySet()){
+				queue.add(entry.getValue());
+				System.out.print(entry.getKey()+"("+entry.getValue().isValue()+"),");
+			}
+			queue.add(null);
+			System.out.print("    ");
+		}
+	}
 	
 	public boolean delete(String key) {
 		int len = 0;

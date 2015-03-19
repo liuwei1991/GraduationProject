@@ -14,24 +14,13 @@ public class HBTreeOptimize {
 
 	public NodeOptimize rootNodeOpt;
 	private int chunkSize = 8;
-	private int minLayerNum = 16;
+	private int minLayerNum = 8;
 	private Comparator c;
 
-	public HBTreeOptimize(final Comparator c, final int chunkSize) {
+	public HBTreeOptimize(final Comparator c, final int chunkSize,final int minLayerNum) {
 		this.c = c;
 		this.chunkSize = chunkSize;
-		rootNodeOpt = new NodeOptimize();
-		rootNodeOpt
-				.setNextLayer(new ConcurrentSkipListMap<String, NodeOptimize>(c));
-	}
-
-	public HBTreeOptimize(final Comparator c, final int chunkSize,
-			final int minLayerNum) {
-		this.c = c;
-		this.chunkSize = chunkSize;
-		rootNodeOpt = new NodeOptimize();
-		rootNodeOpt
-				.setNextLayer(new ConcurrentSkipListMap<String, NodeOptimize>(c));
+		rootNodeOpt = new NodeOptimize(false,true,null,new ConcurrentSkipListMap<String, NodeOptimize>(c));
 		this.minLayerNum = minLayerNum;
 	}
 
@@ -77,7 +66,7 @@ public class HBTreeOptimize {
 				}
 				return true;
 			} else {
-				String cur = key.substring(len,	Math.max(len + chunkSize, key.length()));
+				String cur = key.substring(len,	Math.min(len + chunkSize, key.length()));
 				nodeOpt = nodeMap.get(cur);
 				if (nodeOpt == null) {
 					if (len + chunkSize >= key.length()) {
@@ -85,7 +74,7 @@ public class HBTreeOptimize {
 								new ConcurrentSkipListMap<String, NodeOptimize>(c));
 						nodeMap.put(cur, nodeOpt);
 					} else {
-						nodeOpt = new NodeOptimize(false,true,	null,
+						nodeOpt = new NodeOptimize(false,true,null,
 								new ConcurrentSkipListMap<String, NodeOptimize>(c));
 						nodeMap.put(cur, nodeOpt);
 						this.insertDataNode(nodeOpt, key.substring(len + chunkSize), kvs);
@@ -102,6 +91,29 @@ public class HBTreeOptimize {
 			nodeOpt.setValue(new Value(kvs));
 		}
 		return true;
+	}
+	
+	public void adjustLeafNode(NodeOptimize no){
+		ConcurrentNavigableMap<String, NodeOptimize> oldMap = no.getNextLayer();
+		no.setNextLayer(new ConcurrentSkipListMap<String, NodeOptimize>(c));
+		no.setLeaf(false);
+		ConcurrentNavigableMap<String, NodeOptimize> newMap = no.getNextLayer();
+		for(Entry<String,NodeOptimize> e:oldMap.entrySet()){
+			String str = e.getKey();
+			NodeOptimize oldNode = e.getValue();
+			if(str.length()<=chunkSize){
+				this.insertDataNode(no, str, oldNode);
+			}else{
+				String curChunk = str.substring(0,chunkSize);
+				String rest = str.substring(chunkSize);
+				NodeOptimize tmp = newMap.get(curChunk);
+				if(tmp==null){
+					tmp = new NodeOptimize(false,true,null,new ConcurrentSkipListMap<String, NodeOptimize>()); 
+					newMap.put(curChunk, tmp);
+				}
+				this.insertDataNode(tmp, rest, oldNode);
+			}
+		}
 	}
 	
 	public void insertDataNode(NodeOptimize parent,String key,Map<String, String> kvs){
@@ -131,54 +143,6 @@ public class HBTreeOptimize {
 				tmp.setIsValue(true);
 				tmp.setValue(child.getValue());
 			}
-		}
-	}
-	
-	public void adjustLeafNode(NodeOptimize no){
-		ConcurrentNavigableMap<String, NodeOptimize> oldMap = no.getNextLayer();
-		no.setNextLayer(new ConcurrentSkipListMap<String, NodeOptimize>(c));
-		no.setLeaf(false);
-		ConcurrentNavigableMap<String, NodeOptimize> newMap = no.getNextLayer();
-		for(Entry<String,NodeOptimize> e:oldMap.entrySet()){
-			String str = e.getKey();
-			NodeOptimize oldNode = e.getValue();
-			if(str.length()<=chunkSize){
-				this.insertDataNode(no, str, oldNode);
-			}else{
-				String curChunk = str.substring(0,chunkSize);
-				String rest = str.substring(chunkSize);
-				NodeOptimize tmp = newMap.get(curChunk);
-				if(tmp==null){
-					tmp = new NodeOptimize(false,true,null,new ConcurrentSkipListMap<String, NodeOptimize>()); 
-					newMap.put(curChunk, tmp);
-				}
-				this.insertDataNode(tmp, rest, oldNode);
-			}
-		}
-	}
-	
-	public static void printHBTree(NodeOptimize node) {
-		Queue<NodeOptimize> queue = new LinkedList<NodeOptimize>();
-		queue.add(node);
-		queue.add(null);
-		while (!queue.isEmpty()) {
-			NodeOptimize curNode = queue.poll();
-			if (curNode == null) {
-				if (queue.isEmpty()) {
-					return;
-				}
-				System.out.println();
-				continue;
-			}
-			ConcurrentNavigableMap<String, NodeOptimize> nodeMap = curNode
-					.getNextLayer();
-			for (Entry<String, NodeOptimize> entry : nodeMap.entrySet()) {
-				queue.add(entry.getValue());
-				System.out.print(entry.getKey() + "("
-						+ entry.getValue().isValue() + "),");
-			}
-			queue.add(null);
-			System.out.print("    ");
 		}
 	}
 

@@ -20,10 +20,10 @@ public class HBTreeSingleThreadTest {
 			return 1;
 		}
 	};
-	public void test(int chunkSize,String filePath,boolean optimize) throws IOException{
+	public void test(int chunkSize,String filePath,boolean optimize,int minLayerNum) throws IOException{
 		if(optimize){
 			System.out.println("HBTreeSingleThreadTest - Optimize:");
-			HBTreeOptimize hbtreeop = new HBTreeOptimize(c,chunkSize);
+			HBTreeOptimize hbtreeop = new HBTreeOptimize(c,chunkSize,minLayerNum);
 			HBPutTest pt = new HBPutTest(hbtreeop,filePath);
 			pt.doPut();
 			
@@ -43,9 +43,11 @@ public class HBTreeSingleThreadTest {
 	public static void main(String[] args) throws IOException, InterruptedException{
 		HBTreeSingleThreadTest hbt = new HBTreeSingleThreadTest();
 		int chunkSize = 8;
-		boolean optimize = false;
-		String filePath = "D:/TestData/t2/keylen=16/1000w.txt";
-
-		hbt.test(chunkSize,filePath,optimize);
+		boolean optimize = true;
+		int minLayerNum = 16;
+//		String filePath = "D:/TestData/t2/keylen=16/1000w.txt";
+		String filePath = "D:/TestData/t2/keylen=24 columnNum=4/500w.txt";
+		
+		hbt.test(chunkSize,filePath,optimize,minLayerNum);
 	}
 }

@@ -50,7 +50,11 @@ public class HBGetTest{
 			if(str==null){
 				break;
 			}
-			this.hbtree.get(str.split(" ")[0],column);
+			String line[] = str.split(" ");
+			for(int j=1;j<line.length;j++){
+				this.hbtree.get(line[0],column+j);
+//				totalNum++;
+			}
 			
 //			String key = str.split(" ")[0];
 //			this.hbtree.get(key);
@@ -59,7 +63,6 @@ public class HBGetTest{
 //			Value v = this.hbtree.get(key);
 //			String value2 = v==null?"null":v.getValue();
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value1 = "+value1+" , value2 = "+value2);
-//			totalNum++;
 		}
 		Long e = System.currentTimeMillis();
 //		System.out.println("Total number: "+totalNum);
@@ -79,11 +82,15 @@ public class HBGetTest{
 		Long s = System.currentTimeMillis();
 		while(true){
 			String str = br.readLine();
-			String column = "q1";
+			String column = "q";
 			if(str==null){
 				break;
 			}
-			this.hbtreeop.get(str.split(" ")[0],column);
+			String line[] = str.split(" ");
+			for(int j=1;j<line.length;j++){
+				this.hbtreeop.get(line[0],column+j);
+//				totalNum++;
+			}
 			
 //			String key = str.split(" ")[0];
 //			this.hbtree.get(key);
@@ -92,7 +99,6 @@ public class HBGetTest{
 //			Value v = this.hbtree.get(key);
 //			String value2 = v==null?"null":v.getValue();
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value1 = "+value1+" , value2 = "+value2);
-//			totalNum++;
 		}
 		Long e = System.currentTimeMillis();
 //		System.out.println("Total number: "+totalNum);

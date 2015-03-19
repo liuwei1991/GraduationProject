@@ -55,7 +55,7 @@ public class DataGenT2 {
 		int numPerFile = this.num/fileNum;
 		int totalNum = 0;
 		File file = new File(this.filePath);
-		file.mkdir();
+		file.mkdirs();
 		for(int curNum=0;curNum<fileNum;curNum++){
 			file = new File(this.filePath+"/"+curNum+".txt");
 			
@@ -88,20 +88,19 @@ public class DataGenT2 {
 	
 	public static void main(String[] args) throws IOException{
 		int base = 10000;
-		int keylen[] = {8,16,24};
-		
-//		for(int len:keylen){
-//			for(int i=1;i<=10;i++){
-//				DataGenT2 dg = new DataGenT2(500*i*base,len,"D:/TestData/t2/keylen="+len+"/"+500*i+"w");
-//				dg.genData(threadNum);
-//			}
-//		}
-		
-		int totalNum = 1500;
+		int keylen[] = {24,32};
 		int threadNum = 10;
+		int columnNum = 4;
 		
-		DataGenT2 dg = new DataGenT2(totalNum*base,16,4,"D:/TestData/t2/keylen=16/"+totalNum+"w");
-		dg.genData(threadNum);
-		
+		for(int len:keylen){
+			for(int i=1;i<=10;i++){
+				DataGenT2 dg = new DataGenT2(500*i*base,len,columnNum,"D:/TestData/t2/keylen="+len+" columnNum="+columnNum+"/"+500*i+"w");
+				if(threadNum<=1){
+					dg.genData();
+				}else{
+					dg.genData(threadNum);
+				}
+			}
+		}
 	}
 }
