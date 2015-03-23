@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import test.CommonVariable;
 import tree.bplus.BPlus;
 import tree.hb.HBTree;
 import tree.hb.HBTreeOptimize;
@@ -136,10 +137,9 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 
 	public static Thread output = new Thread() {
 		public void run() {
-			String fileName = "d:/result.txt";
 			FileWriter resultWriter = null;
 			try {
-				resultWriter = new FileWriter(fileName,true);
+				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
 				resultWriter.write("\r\n\r\n\r\n");
 			} catch (IOException e1) {
 				e1.printStackTrace();
