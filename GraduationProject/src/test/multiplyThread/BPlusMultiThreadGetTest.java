@@ -3,6 +3,7 @@ package test.multiplyThread;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -87,24 +88,41 @@ public class BPlusMultiThreadGetTest implements Runnable {
 	static long lastNum = 0;
 
 	public static Thread output = new Thread() {
+		
 		public void run() {
+			String fileName = "d:/result.txt";
+			FileWriter resultWriter = null;
+			try {
+				resultWriter = new FileWriter(fileName,true);
+				resultWriter.write("\r\n\r\n\r\n");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			String r = null;
 			while (true) {
 				try {
 					sleep(2000);
 					long current = totalNum;
-					System.out
-							.println("BPlusGet - StartTime:" + time + " Now:"
+					r = "BPlusGet - StartTime:" + time + " Now:"
 									+ System.currentTimeMillis() + " getNum :"
 									+ current + " CurrentSpeed:"
 									+ ((current - lastNum) * 1000)
 									/ (System.currentTimeMillis() - time)
 									+ "  TotalSpeed:" + (current * 1000)
 									/ (System.currentTimeMillis() - startTime)
-									+ " r/s");
+									+ " r/s";
 					time = System.currentTimeMillis();
 					lastNum = current;
-				} catch (InterruptedException e) {
+					System.out.println(r);
+					resultWriter.write(r+"\r\n");
+					resultWriter.flush();
+				} catch (Exception e) {
 					e.printStackTrace();
+					try {
+						resultWriter.close();
+					} catch (IOException s) {
+						s.printStackTrace();
+					}
 				}
 			}
 		}
