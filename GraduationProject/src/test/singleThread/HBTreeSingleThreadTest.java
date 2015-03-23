@@ -46,7 +46,7 @@ public class HBTreeSingleThreadTest {
 		boolean optimize = true;
 		int minLayerNum = 16;
 //		String filePath = "D:/TestData/t2/keylen=16/1000w.txt";
-		String filePath = "D:/TestData/t2/keylen=24 columnNum=4/500w.txt";
+		String filePath = "/TestData/t2/keylen=16 columnNum=1/500w/";
 		
 		hbt.test(chunkSize,filePath,optimize,minLayerNum);
 	}

@@ -32,7 +32,7 @@ public class BPlusSingleThreadTest {
 	
 	public static void main(String[] args) throws IOException {
 		BPlusSingleThreadTest bpt = new BPlusSingleThreadTest();
-		String filePath = "D:/TestData/t2/keylen=16/1000w.txt";
+		String filePath = "/TestData/t2/keylen=16 columnNum=1/500w/";
 		
 		bpt.test(filePath);
 	}

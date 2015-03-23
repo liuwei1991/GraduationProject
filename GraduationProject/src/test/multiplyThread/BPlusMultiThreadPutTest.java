@@ -96,11 +96,6 @@ public class BPlusMultiThreadPutTest implements Runnable{
 			}
 		}
 	};
-	static{
-		output.setPriority(Thread.MAX_PRIORITY);
-		output.start();
-	}
-	
 	
 	public static void main(String[] args){
 		Comparator<String> c = new Comparator<String>() {
@@ -114,7 +109,7 @@ public class BPlusMultiThreadPutTest implements Runnable{
 				return 1;
 			}
 		};
-		String inputFilePath = "D:/TestData/t2/keylen=16 columnNum=4/1000w/";
+		String inputFilePath = "/TestData/t2/keylen=16 columnNum=1/500w/";
 		int threadNum = 10; 
 		
 		BPlus bp = new BPlus(c);
@@ -124,5 +119,7 @@ public class BPlusMultiThreadPutTest implements Runnable{
 			t.setName(String.valueOf(i));
 			t.start();
 		}
+		output.setPriority(Thread.MAX_PRIORITY);
+		output.start();
 	}
 }

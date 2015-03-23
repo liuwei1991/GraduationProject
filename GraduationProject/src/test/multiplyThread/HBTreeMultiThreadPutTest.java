@@ -99,11 +99,6 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 			}
 		}
 	};
-	static{
-		output.setPriority(Thread.MAX_PRIORITY);
-		output.start();
-	}
-	
 	
 	public static void main(String[] args){
 		Comparator<String> c = new Comparator<String>() {
@@ -118,7 +113,7 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 			}
 		};
 		
-		String inputFilePath = "D:/TestData/t2/keylen=16/1000w/";
+		String inputFilePath = "/TestData/t2/keylen=16 columnNum=1/500w/";
 		int chunkSize = 6;
 		int threadNum = 10;
 		boolean optimize = false;
@@ -130,5 +125,7 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 			t.setName(String.valueOf(i));
 			t.start();
 		}
+		output.setPriority(Thread.MAX_PRIORITY);
+		output.start();
 	}
 }

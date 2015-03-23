@@ -91,14 +91,14 @@ public class HBPutTest {
 			}
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
 			this.hbtreeop.add(line[0], kvs);
-//			totalNum++;
-//			if(totalNum%1000000==0){
-//				System.out.println("Total num: "+totalNum);
-//			}
+			totalNum++;
+			if(totalNum%1000000==0){
+				System.out.println("Total num: "+totalNum);
+			}
 		}
 		Long e = System.currentTimeMillis();
 		System.out.println("HBTree - PutTest - total number: "+totalNum+" , Total time: "+(e-s)/1000.0+"s. Speed:"+totalNum*1000.0/(e-s)+" /second.");
-		HBTree.printHBTree(this.hbtreeop.rootNodeOpt);
+//		HBTree.printHBTree(this.hbtreeop.rootNodeOpt);
 	}
 	public static void main(String[] args) throws IOException{
 		Comparator<String> c = new Comparator<String>(){

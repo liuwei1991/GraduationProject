@@ -175,10 +175,6 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 			}
 		}
 	};
-	static {
-		output.setPriority(Thread.MAX_PRIORITY);
-		output.start();
-	}
 
 	public static void main(String[] args) throws IOException {
 		Comparator<String> c = new Comparator<String>() {
@@ -193,7 +189,7 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 			}
 		};
 
-		String inputFilePath = "D:/TestData/t2/keylen=16/500w/";
+		String inputFilePath = "/TestData/t2/keylen=16 columnNum=1/500w/";
 		int chunkSize = 4;
 		int threadNum = 10;
 		boolean optimize = false;
@@ -207,5 +203,7 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 			t.setName(String.valueOf(i));
 			t.start();
 		}
+		output.setPriority(Thread.MAX_PRIORITY);
+		output.start();
 	}
 }
