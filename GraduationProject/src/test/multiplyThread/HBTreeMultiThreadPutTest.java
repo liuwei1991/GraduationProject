@@ -19,10 +19,12 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 	private HBTree hbtree;
 	private String inputFilePath ;
 	private static int totalNum = 0;
+	public static int chunkSize = 0;
 	
 	public HBTreeMultiThreadPutTest(HBTree hbtree,String inputFilePath){
 		this.hbtree = hbtree;
 		this.inputFilePath = inputFilePath;
+		this.chunkSize = hbtree.chunkSize;
 	}
 	
 	@Override
@@ -66,7 +68,7 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 			FileWriter resultWriter = null;
 			try {
 				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
-				resultWriter.write("\r\n\r\n\r\n");
+				resultWriter.write("\r\n\r\nchunkSize = "+HBTreeMultiThreadPutTest.chunkSize+"\r\n");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

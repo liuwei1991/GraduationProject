@@ -12,7 +12,7 @@ import common.Value;
 
 public class HBTree {
 	public  Node rootNode;
-	private int chunkSize = 8;
+	public int chunkSize = 8;
 	private int minLayerNum = 0;
 	private Comparator c;
 

@@ -22,12 +22,14 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 	private static int totalNum = 0;
 	private HBTreeOptimize hbtreeop;
 	boolean isOptimize = false;
+	public static int chunkSize = 0;
 	
 	
 	public HBTreeMultiThreadGetTest(HBTree hbtree, String inputFilePath,int threadNum) {
 		this.hbtree = hbtree;
 		this.inputFilePath = inputFilePath;
 		this.threadNum = threadNum;
+		this.chunkSize = hbtree.chunkSize;
 	}
 	
 	public HBTreeMultiThreadGetTest(HBTreeOptimize hbtreeop, String inputFilePath,int threadNum) {
@@ -140,7 +142,7 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 			FileWriter resultWriter = null;
 			try {
 				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
-				resultWriter.write("\r\n\r\n\r\n");
+				resultWriter.write("\r\n\r\nchunkSize = "+HBTreeMultiThreadGetTest.chunkSize+"\r\n");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
