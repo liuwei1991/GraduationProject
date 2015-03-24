@@ -30,12 +30,15 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 		this.inputFilePath = inputFilePath;
 		this.threadNum = threadNum;
 		this.chunkSize = hbtree.chunkSize;
+		this.isOptimize = false;
 	}
 	
 	public HBTreeMultiThreadGetTest(HBTreeOptimize hbtreeop, String inputFilePath,int threadNum) {
 		this.hbtreeop = hbtreeop;
 		this.inputFilePath = inputFilePath;
 		this.threadNum = threadNum;
+		this.chunkSize = hbtreeop.chunkSize;
+		this.isOptimize = true;
 	}
 	
 	public void put() throws IOException{
@@ -192,10 +195,18 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 		int chunkSize = 4;
 		int threadNum = 10;
 		boolean optimize = false;
+		int minLayerNum = 16;
 		
-		HBTree hbtree = new HBTree(c,chunkSize);
-		HBTreeMultiThreadGetTest hbtg = new HBTreeMultiThreadGetTest(hbtree,
-				inputFilePath,threadNum);
+		
+		HBTreeMultiThreadGetTest hbtg = null;
+		if(optimize){
+			HBTreeOptimize hbtreeop = new HBTreeOptimize(c,chunkSize,minLayerNum);
+			hbtg = new HBTreeMultiThreadGetTest(hbtreeop,inputFilePath,threadNum);
+		}else{
+			HBTree hbtree = new HBTree(c,chunkSize);
+			hbtg = new HBTreeMultiThreadGetTest(hbtree,inputFilePath,threadNum);
+		}
+		
 		hbtg.put();
 		for (int i = 0; i < threadNum; i++) {
 			Thread t = new Thread(hbtg);
