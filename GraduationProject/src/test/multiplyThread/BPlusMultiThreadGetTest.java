@@ -42,10 +42,10 @@ public class BPlusMultiThreadGetTest implements Runnable {
 					break;
 				}
 				String[] line = str.split(" ");
-				String column = "q1";
-				Map<String,String> kvs = new HashMap<String,String>();
-				kvs.put(column, line[1]);
-				this.bskl.add(line[0],kvs);
+//				Map<String,String> kvs = new HashMap<String,String>();
+				for(int j=1;j<line.length;j++){
+					this.bskl.add(line[0],"column"+j, line[0]+","+line[j] );
+				}
 			}
 		}
 	}
@@ -71,17 +71,18 @@ public class BPlusMultiThreadGetTest implements Runnable {
 					continue;
 //					break;
 				}
-				String key = str.split(" ")[0];
-				String column = "q1";
-				this.bskl.get(key,column);
-				synchronized (BPlusMultiThreadGetTest.class) {
-					totalNum++;
+				String[] line = str.split(" ");
+				String column = "q";
+				for(int i=1;i<line.length;i++){
+					this.bskl.get(line[0], column+i);
+					synchronized (BPlusMultiThreadGetTest.class) {
+						totalNum++;
+					}
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	static long time = System.currentTimeMillis();

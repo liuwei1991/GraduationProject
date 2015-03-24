@@ -13,7 +13,7 @@ import common.Value;
 public class HBTreeOptimize {
 
 	public NodeOptimize rootNodeOpt;
-	private int chunkSize = 8;
+	public int chunkSize = 8;
 	private int minLayerNum = 8;
 	private Comparator c;
 
@@ -52,6 +52,47 @@ public class HBTreeOptimize {
 		}
 	}
 
+	public boolean add(String key, String column, String value) {
+		int len = 0;
+		ConcurrentNavigableMap<String, NodeOptimize> nodeMap = rootNodeOpt.getNextLayer();
+		NodeOptimize nodeOpt = this.rootNodeOpt;
+		while (len < key.length()) {
+			nodeMap = nodeOpt.getNextLayer();
+			if (nodeOpt.isLeaf()) {
+				String cur = key.substring(len);
+				this.insertDataNode(nodeOpt, cur, column,value);
+				if(nodeOpt.getNextLayer().size()>this.minLayerNum){
+					this.adjustLeafNode(nodeOpt);
+				}
+				return true;
+			} else {
+				String cur = key.substring(len,	Math.min(len + chunkSize, key.length()));
+				nodeOpt = nodeMap.get(cur);
+				if (nodeOpt == null) {
+					if (len + chunkSize >= key.length()) {
+						nodeOpt = new NodeOptimize(true,false,new Value(column,value),
+								new ConcurrentSkipListMap<String, NodeOptimize>(c));
+						nodeMap.put(cur, nodeOpt);
+					} else {
+						nodeOpt = new NodeOptimize(false,true,null,
+								new ConcurrentSkipListMap<String, NodeOptimize>(c));
+						nodeMap.put(cur, nodeOpt);
+						this.insertDataNode(nodeOpt, key.substring(len + chunkSize), column,value);
+					}
+					return true;
+				}
+				len += chunkSize;
+			}
+		}
+		if (nodeOpt.isValue()) {
+			nodeOpt.getValue().putValue(column,value);
+		} else {
+			nodeOpt.setIsValue(true);
+			nodeOpt.setValue(new Value(column,value));
+		}
+		return true;
+	}
+	
 	public boolean add(String key, Map<String, String> kvs) {
 		int len = 0;
 		ConcurrentNavigableMap<String, NodeOptimize> nodeMap = rootNodeOpt.getNextLayer();
@@ -128,6 +169,22 @@ public class HBTreeOptimize {
 			}else{
 				tmp.setIsValue(true);
 				tmp.setValue(new Value(kvs));
+			}
+		}
+	}
+	
+	public void insertDataNode(NodeOptimize parent,String key,String column, String value){
+		NodeOptimize tmp = parent.getNextLayer().get(key);
+		if(tmp==null){
+			tmp = new NodeOptimize(true,false,new Value(column,value),
+					new ConcurrentSkipListMap<String, NodeOptimize>()); 
+			parent.getNextLayer().put(key, tmp);
+		}else{
+			if(tmp.isValue()){
+				tmp.getValue().putValue(column,value);
+			}else{
+				tmp.setIsValue(true);
+				tmp.setValue(new Value(column,value));
 			}
 		}
 	}

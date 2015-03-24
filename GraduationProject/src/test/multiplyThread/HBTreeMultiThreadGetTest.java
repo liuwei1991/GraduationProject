@@ -63,11 +63,11 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 				}
 				String[] line = str.split(" ");
 				String column = "q";
-				Map<String,String> kvs = new HashMap<String,String>();
+//				Map<String,String> kvs = new HashMap<String,String>();
 				for(int j=1;j<line.length;j++){
-					kvs.put(column+j, line[j]);
+//					kvs.put(column+j, line[j]);
+					this.hbtree.add(line[0],"column"+i, line[i]);
 				}
-				this.hbtree.add(line[0], kvs);
 			}
 		}
 	}
@@ -89,11 +89,10 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 				}
 				String[] line = str.split(" ");
 				String column = "q";
-				Map<String,String> kvs = new HashMap<String,String>();
+//				Map<String,String> kvs = new HashMap<String,String>();
 				for(int j=1;j<line.length;j++){
-					kvs.put(column+j, line[j]);
+					this.hbtreeop.add(line[0],"column"+i, line[i]);
 				}
-				this.hbtreeop.add(line[0], kvs);
 			}
 		}
 	}

@@ -41,13 +41,13 @@ public class BPlusMultiThreadPutTest implements Runnable{
 					break;
 				}
 				String[] line = str.split(" ");
-				Map<String,String> kvs = new HashMap<String,String>();
+//				Map<String,String> kvs = new HashMap<String,String>();
+				
 				for(int i=1;i<line.length;i++){
-					kvs.put("column"+i, line[0]+","+line[i]);
-				}
-				this.bskl.add(line[0], kvs);
-				synchronized(BPlusMultiThreadPutTest.class){
-					totalNum++;
+					this.bskl.add(line[0],"column"+i, line[0]+","+line[i] );
+					synchronized(BPlusMultiThreadPutTest.class){
+						totalNum++;
+					}
 				}
 			}
 		}catch(Exception e){

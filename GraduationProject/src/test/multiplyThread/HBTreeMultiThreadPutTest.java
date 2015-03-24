@@ -13,18 +13,29 @@ import test.CommonVariable;
 import tree.bplus.BPlus;
 import tree.hb.HBPutTest;
 import tree.hb.HBTree;
+import tree.hb.HBTreeOptimize;
 import common.Value;
 
 public class HBTreeMultiThreadPutTest implements Runnable{
 	private HBTree hbtree;
+	private HBTreeOptimize hbtreeop;
 	private String inputFilePath ;
+	private boolean isOptimize = false;
 	private static int totalNum = 0;
 	public static int chunkSize = 0;
+	
 	
 	public HBTreeMultiThreadPutTest(HBTree hbtree,String inputFilePath){
 		this.hbtree = hbtree;
 		this.inputFilePath = inputFilePath;
 		this.chunkSize = hbtree.chunkSize;
+	}
+	
+	public HBTreeMultiThreadPutTest(HBTreeOptimize hbtreeop,String inputFilePath){
+		this.hbtreeop = hbtreeop;
+		this.inputFilePath = inputFilePath;
+		this.chunkSize = hbtreeop.chunkSize;
+		this.isOptimize = true;
 	}
 	
 	@Override
@@ -38,19 +49,35 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 		try{
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
-			while(true){
-				String str = br.readLine();
-				if(str==null){
-					break;
+			if(this.isOptimize){
+				while(true){
+					String str = br.readLine();
+					if(str==null){
+						break;
+					}
+					String[] line = str.split(" ");
+//				Map<String,String> kvs = new HashMap<String,String>();
+					for(int i=1;i<line.length;i++){
+						this.hbtreeop.add(line[0],"column"+i, line[i]);
+						synchronized(HBTreeMultiThreadPutTest.class){
+							totalNum++;
+						}
+					}
 				}
-				String[] line = str.split(" ");
-				Map<String,String> kvs = new HashMap<String,String>();
-				for(int i=1;i<line.length;i++){
-					kvs.put("column"+i, line[i]);
-				}
-				this.hbtree.add(line[0], kvs);
-				synchronized(HBTreeMultiThreadPutTest.class){
-					totalNum++;
+			}else{
+				while(true){
+					String str = br.readLine();
+					if(str==null){
+						break;
+					}
+					String[] line = str.split(" ");
+//				Map<String,String> kvs = new HashMap<String,String>();
+					for(int i=1;i<line.length;i++){
+						this.hbtree.add(line[0],"column"+i, line[i]);
+						synchronized(HBTreeMultiThreadPutTest.class){
+							totalNum++;
+						}
+					}
 				}
 			}
 		}catch(Exception e){

@@ -35,6 +35,15 @@ public class BPlus {
 		return this.delegatee.get(this.delegatee.lastKey());
 	}
 
+	public boolean add(String key,String column,String value) {
+		if(this.delegatee.containsKey(key)){
+			this.delegatee.get(key).putValue(column,value);
+			return true;
+		}else{
+			return this.delegatee.put(key, new Value(column, value)) == null;
+		}
+	}
+	
 	public boolean add(String key,Map<String,String> kvs) {
 		if(this.delegatee.containsKey(key)){
 			this.delegatee.get(key).putValue(kvs);
