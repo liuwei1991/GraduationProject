@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import test.CommonVariable;
 import common.Value;
 
 public class BPPutTest {
@@ -35,16 +36,17 @@ public class BPPutTest {
 			if(str==null){
 				break;
 			}
-//			String key = str.split(" ")[0];
-//			String value = str.split(" ")[1];
 			String[] line = str.split(" ");
-			Map<String,String> kvs = new HashMap<String,String>();
+//			Map<String,String> kvs = new HashMap<String,String>();
 			for(int i=1;i<line.length;i++){
-				kvs.put("column"+i, line[0]+","+line[i]);
+				this.bskl.add(line[0],CommonVariable.COLUMN+i, line[0]+","+line[i]);
+				totalNum++;
+			}
+			if(totalNum%1000000==0){
+				System.out.println("Total put num: "+totalNum);
 			}
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
-			this.bskl.add(line[0], kvs);
-			totalNum++;
+//			this.bskl.add(line[0], kvs);
 		}
 		Long e = System.currentTimeMillis();
 		System.out.println("BSkipList - PutTest - total number: "+totalNum+" , Total time: "+(e-s)/1000.0+"s. Speed:"+totalNum*1000.0/(e-s)+" /second.");

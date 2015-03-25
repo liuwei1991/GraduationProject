@@ -15,91 +15,90 @@ import tree.hb.HBTree;
 import tree.hb.HBTreeOptimize;
 import common.Value;
 
-public class HBTreeMultiThreadGetTest implements Runnable{
+public class HBTreeMultiThreadGetTest implements Runnable {
 	private HBTree hbtree;
-	private String inputFilePath ;
+	private static String inputFilePath;
 	private int threadNum;
 	private static int totalNum = 0;
 	private HBTreeOptimize hbtreeop;
 	private static boolean isOptimize = false;
 	public static int chunkSize = 0;
-	
-	
-	public HBTreeMultiThreadGetTest(HBTree hbtree, String inputFilePath,int threadNum) {
+
+	public HBTreeMultiThreadGetTest(HBTree hbtree, String inputFilePath,
+			int threadNum) {
 		this.hbtree = hbtree;
 		this.inputFilePath = inputFilePath;
 		this.threadNum = threadNum;
 		this.chunkSize = hbtree.chunkSize;
 		this.isOptimize = false;
 	}
-	
-	public HBTreeMultiThreadGetTest(HBTreeOptimize hbtreeop, String inputFilePath,int threadNum) {
+
+	public HBTreeMultiThreadGetTest(HBTreeOptimize hbtreeop,
+			String inputFilePath, int threadNum) {
 		this.hbtreeop = hbtreeop;
 		this.inputFilePath = inputFilePath;
 		this.threadNum = threadNum;
 		this.chunkSize = hbtreeop.chunkSize;
 		this.isOptimize = true;
 	}
-	
-	public void put() throws IOException{
-		if(this.isOptimize){
+
+	public void put() throws IOException {
+		if (this.isOptimize) {
 			this.putOptimize();
-		}else{
+		} else {
 			this.putOrdinary();
 		}
 	}
-	
-	public void putOrdinary() throws IOException{
-		for(int i=0;i<this.threadNum;i++){
-			File file = new File(this.inputFilePath+i+".txt");
-			if(!file.exists()){
+
+	public void putOrdinary() throws IOException {
+		for (int i = 0; i < this.threadNum; i++) {
+			File file = new File(this.inputFilePath + i + ".txt");
+			if (!file.exists()) {
 				System.out.println("Input file is not found!");
 				return;
 			}
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
-			
-			while(true){
+
+			while (true) {
 				String str = br.readLine();
-				if(str==null){
+				if (str == null) {
 					break;
 				}
 				String[] line = str.split(" ");
-				String column = "q";
-//				Map<String,String> kvs = new HashMap<String,String>();
-				for(int j=1;j<line.length;j++){
-//					kvs.put(column+j, line[j]);
-					this.hbtree.add(line[0],"column"+i, line[i]);
+				// Map<String,String> kvs = new HashMap<String,String>();
+				for (int j = 1; j < line.length; j++) {
+					// kvs.put(column+j, line[j]);
+					this.hbtree.add(line[0], CommonVariable.COLUMN + j, line[j]);
 				}
 			}
 		}
 	}
 
-	public void putOptimize() throws IOException{
-		for(int i=0;i<this.threadNum;i++){
-			File file = new File(this.inputFilePath+i+".txt");
-			if(!file.exists()){
+	public void putOptimize() throws IOException {
+		for (int i = 0; i < this.threadNum; i++) {
+			File file = new File(this.inputFilePath + i + ".txt");
+			if (!file.exists()) {
 				System.out.println("Input file is not found!");
 				return;
 			}
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
-			
-			while(true){
+
+			while (true) {
 				String str = br.readLine();
-				if(str==null){
+				if (str == null) {
 					break;
 				}
 				String[] line = str.split(" ");
-				String column = "q";
-//				Map<String,String> kvs = new HashMap<String,String>();
-				for(int j=1;j<line.length;j++){
-					this.hbtreeop.add(line[0],"column"+i, line[i]);
+				// Map<String,String> kvs = new HashMap<String,String>();
+				for (int j = 1; j < line.length; j++) {
+					this.hbtreeop.add(line[0], CommonVariable.COLUMN + j, line[j]);
 				}
 			}
 		}
 	}
-	
+
 	@Override
 	public void run() {
 		String id = Thread.currentThread().getName();
@@ -114,17 +113,17 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 
 			while (true) {
 				String str = br.readLine();
-				// if reach the end of the file, the start from the begin of the file.
+				// if reach the end of the file, the start from the begin of the
+				// file.
 				if (str == null) {
 					fr = new FileReader(file);
 					br = new BufferedReader(fr);
 					continue;
-//					break;
+					// break;
 				}
 				String[] lines = str.split(" ");
-				String column = "q";
-				for(int j=1;j<lines.length;j++){
-					this.hbtree.get(lines[0],column+j);
+				for (int j = 1; j < lines.length; j++) {
+					this.hbtree.get(lines[0], CommonVariable.COLUMN + j);
 					synchronized (HBTreeMultiThreadGetTest.class) {
 						totalNum++;
 					}
@@ -143,8 +142,14 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 		public void run() {
 			FileWriter resultWriter = null;
 			try {
-				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
-				resultWriter.write("\r\n\r\nOptimize = "+HBTreeMultiThreadGetTest.isOptimize+" , chunkSize = "+HBTreeMultiThreadGetTest.chunkSize+"\r\n");
+				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,
+						true);
+				resultWriter.write("\r\n\r\nOptimize = "
+						+ HBTreeMultiThreadGetTest.isOptimize
+						+ " , chunkSize = "
+						+ HBTreeMultiThreadGetTest.chunkSize
+						+ ", InputFilePath:"
+						+ HBTreeMultiThreadGetTest.inputFilePath + "\r\n");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -154,17 +159,16 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 					sleep(2000);
 					long current = totalNum;
 					r = "HBTreeGet - StartTime:" + time + "  Now:"
-									+ System.currentTimeMillis() + " getNum :"
-									+ current + "  CurrentSpeed:"
-									+ ((current - lastNum) * 1000)
-									/ (System.currentTimeMillis() - time)
-									+ "  TotalSpeed:" + (current * 1000)
-									/ (System.currentTimeMillis() - startTime)
-									+ " r/s";
+							+ System.currentTimeMillis() + " getNum :"
+							+ current + "  CurrentSpeed:"
+							+ ((current - lastNum) * 1000)
+							/ (System.currentTimeMillis() - time)
+							+ "  TotalSpeed:" + (current * 1000)
+							/ (System.currentTimeMillis() - startTime) + " r/s";
 					time = System.currentTimeMillis();
 					lastNum = current;
 					System.out.println(r);
-					resultWriter.write(r+"\r\n");
+					resultWriter.write(r + "\r\n");
 					resultWriter.flush();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -196,17 +200,19 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 		int threadNum = 10;
 		boolean optimize = false;
 		int minLayerNum = 16;
-		
-		
+
 		HBTreeMultiThreadGetTest hbtg = null;
-		if(optimize){
-			HBTreeOptimize hbtreeop = new HBTreeOptimize(c,chunkSize,minLayerNum);
-			hbtg = new HBTreeMultiThreadGetTest(hbtreeop,inputFilePath,threadNum);
-		}else{
-			HBTree hbtree = new HBTree(c,chunkSize);
-			hbtg = new HBTreeMultiThreadGetTest(hbtree,inputFilePath,threadNum);
+		if (optimize) {
+			HBTreeOptimize hbtreeop = new HBTreeOptimize(c, chunkSize,
+					minLayerNum);
+			hbtg = new HBTreeMultiThreadGetTest(hbtreeop, inputFilePath,
+					threadNum);
+		} else {
+			HBTree hbtree = new HBTree(c, chunkSize);
+			hbtg = new HBTreeMultiThreadGetTest(hbtree, inputFilePath,
+					threadNum);
 		}
-		
+
 		hbtg.put();
 		for (int i = 0; i < threadNum; i++) {
 			Thread t = new Thread(hbtg);

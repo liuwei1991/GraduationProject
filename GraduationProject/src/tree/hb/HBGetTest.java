@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
 
+import test.CommonVariable;
 import common.Value;
 
 public class HBGetTest{
@@ -46,16 +47,17 @@ public class HBGetTest{
 		Long s = System.currentTimeMillis();
 		while(true){
 			String str = br.readLine();
-			String column = "q1";
 			if(str==null){
 				break;
 			}
 			String line[] = str.split(" ");
 			for(int j=1;j<line.length;j++){
-				this.hbtree.get(line[0],column+j);
-//				totalNum++;
+				this.hbtree.get(line[0],CommonVariable.COLUMN+j);
+				totalNum++;
 			}
-			
+			if(totalNum%1000000==0){
+				System.out.println("Total get num: "+totalNum);
+			}
 //			String key = str.split(" ")[0];
 //			this.hbtree.get(key);
 			
@@ -82,16 +84,17 @@ public class HBGetTest{
 		Long s = System.currentTimeMillis();
 		while(true){
 			String str = br.readLine();
-			String column = "q";
 			if(str==null){
 				break;
 			}
 			String line[] = str.split(" ");
 			for(int j=1;j<line.length;j++){
-				this.hbtreeop.get(line[0],column+j);
-//				totalNum++;
+				this.hbtreeop.get(line[0],CommonVariable.COLUMN + j);
+				totalNum++;
 			}
-			
+			if(totalNum%1000000==0){
+				System.out.println("Total get num: "+totalNum);
+			}
 //			String key = str.split(" ")[0];
 //			this.hbtree.get(key);
 			

@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import test.CommonVariable;
 import common.Value;
 
 public class HBPutTest {
@@ -52,16 +53,15 @@ public class HBPutTest {
 				break;
 			}
 			String[] line = str.split(" ");
-			Map<String,String> kvs = new HashMap<String,String>();
 			for(int i=1;i<line.length;i++){
-				kvs.put("column"+i, line[i]);
+				this.hbtree.add(line[0], CommonVariable.COLUMN+i, line[i]);
+				totalNum++;
 			}
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
-			this.hbtree.add(line[0], kvs);
-//			totalNum++;
-//			if(totalNum%1000000==0){
-//				System.out.println("Total num: "+totalNum);
-//			}
+//			this.hbtree.add(line[0], kvs);
+			if(totalNum%1000000==0){
+				System.out.println("Total put num: "+totalNum);
+			}
 		}
 		Long e = System.currentTimeMillis();
 		System.out.println("HBTree - PutTest - total number: "+totalNum+" , Total time: "+(e-s)/1000.0+"s. Speed:"+totalNum*1000.0/(e-s)+" /second.");
@@ -85,16 +85,14 @@ public class HBPutTest {
 				break;
 			}
 			String[] line = str.split(" ");
-			Map<String,String> kvs = new HashMap<String,String>();
 			for(int i=1;i<line.length;i++){
-				kvs.put("column"+i, line[i]);
+				this.hbtreeop.add(line[0], CommonVariable.COLUMN+i, line[i]);
+				totalNum++;
+			}
+			if(totalNum%1000000==0){
+				System.out.println("Total put num: "+totalNum);
 			}
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
-			this.hbtreeop.add(line[0], kvs);
-			totalNum++;
-			if(totalNum%1000000==0){
-				System.out.println("Total num: "+totalNum);
-			}
 		}
 		Long e = System.currentTimeMillis();
 		System.out.println("HBTree - PutTest - total number: "+totalNum+" , Total time: "+(e-s)/1000.0+"s. Speed:"+totalNum*1000.0/(e-s)+" /second.");

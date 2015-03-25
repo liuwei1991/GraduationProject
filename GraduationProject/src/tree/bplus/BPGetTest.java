@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
 
+import test.CommonVariable;
 import common.Value;
 
 public class BPGetTest {
@@ -34,11 +35,17 @@ public class BPGetTest {
 			if(str==null){
 				break;
 			}
-			String key = str.split(" ")[0];
-			String column = "q1";
+			String[] line = str.split(" ");
+//			Map<String,String> kvs = new HashMap<String,String>();
+			for(int i=1;i<line.length;i++){
+				this.bskl.get(line[0],CommonVariable.COLUMN+i);
+				totalNum++;
+			}
+			if(totalNum%1000000==0){
+				System.out.println("Total get num: "+totalNum);
+			}
 //			String value = str.split(" ")[1];
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
-			this.bskl.get(key,column);
 //			totalNum++;
 		}
 		Long e = System.currentTimeMillis();
