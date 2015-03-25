@@ -32,8 +32,7 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 	}
 	
 	public HBTreeMultiThreadPutTest(HBTreeOptimize hbtreeop,String inputFilePath){
-		this.hbq
-		treeop = hbtreeop;
+		this.hbtreeop = hbtreeop;
 		this.inputFilePath = inputFilePath;
 		this.chunkSize = hbtreeop.chunkSize;
 		this.isOptimize = true;
