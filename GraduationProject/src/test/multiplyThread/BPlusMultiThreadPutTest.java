@@ -16,7 +16,7 @@ import tree.bplus.BPlus;
 
 public class BPlusMultiThreadPutTest implements Runnable{
 	private BPlus bskl;
-	private String inputFilePath;
+	private static String inputFilePath;
 	private static int totalNum = 0;
 	
 	public BPlusMultiThreadPutTest(BPlus bskl,String inputFilePath){
@@ -65,7 +65,9 @@ public class BPlusMultiThreadPutTest implements Runnable{
 			FileWriter resultWriter = null;
 			try {
 				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
-				resultWriter.write("\r\n\r\n\r\n");
+				resultWriter.write("\r\n\r\n\r\n"
+						+ "InputFilePath:"
+						+ BPlusMultiThreadPutTest.inputFilePath + "\r\n");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
