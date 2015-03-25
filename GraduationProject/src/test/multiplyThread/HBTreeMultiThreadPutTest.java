@@ -145,22 +145,18 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 		boolean optimize = false;
 		int minLayerNum = 16;
 		
+		HBTreeMultiThreadPutTest hbtp = null;
 		if(optimize){
 			HBTreeOptimize hbtreeop = new HBTreeOptimize(c,chunkSize,minLayerNum);
-			HBTreeMultiThreadPutTest hbtp = new HBTreeMultiThreadPutTest(hbtreeop,inputFilePath);
-			for(int i=0;i<threadNum;i++){
-				Thread t =  new Thread(hbtp);
-				t.setName(String.valueOf(i));
-				t.start();
-			}
+			hbtp = new HBTreeMultiThreadPutTest(hbtreeop,inputFilePath);
 		}else{
 			HBTree hbtree= new HBTree(c,chunkSize);
-			HBTreeMultiThreadPutTest hbtp = new HBTreeMultiThreadPutTest(hbtree,inputFilePath);
-			for(int i=0;i<threadNum;i++){
-				Thread t =  new Thread(hbtp);
-				t.setName(String.valueOf(i));
-				t.start();
-			}
+		    hbtp = new HBTreeMultiThreadPutTest(hbtree,inputFilePath);
+		}
+		for(int i=0;i<threadNum;i++){
+			Thread t =  new Thread(hbtp);
+			t.setName(String.valueOf(i));
+			t.start();
 		}
 		output.setPriority(Thread.MAX_PRIORITY);
 		output.start();
