@@ -21,7 +21,7 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 	private int threadNum;
 	private static int totalNum = 0;
 	private HBTreeOptimize hbtreeop;
-	boolean isOptimize = false;
+	private static boolean isOptimize = false;
 	public static int chunkSize = 0;
 	
 	
@@ -144,7 +144,7 @@ public class HBTreeMultiThreadGetTest implements Runnable{
 			FileWriter resultWriter = null;
 			try {
 				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
-				resultWriter.write("\r\n\r\nchunkSize = "+HBTreeMultiThreadGetTest.chunkSize+"\r\n");
+				resultWriter.write("\r\n\r\nOptimize = "+HBTreeMultiThreadGetTest.isOptimize+" , chunkSize = "+HBTreeMultiThreadGetTest.chunkSize+"\r\n");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

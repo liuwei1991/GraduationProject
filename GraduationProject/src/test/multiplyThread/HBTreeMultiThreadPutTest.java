@@ -20,7 +20,7 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 	private HBTree hbtree;
 	private HBTreeOptimize hbtreeop;
 	private String inputFilePath ;
-	private boolean isOptimize = false;
+	private static boolean isOptimize = false;
 	private static int totalNum = 0;
 	public static int chunkSize = 0;
 	
@@ -32,7 +32,8 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 	}
 	
 	public HBTreeMultiThreadPutTest(HBTreeOptimize hbtreeop,String inputFilePath){
-		this.hbtreeop = hbtreeop;
+		this.hbq
+		treeop = hbtreeop;
 		this.inputFilePath = inputFilePath;
 		this.chunkSize = hbtreeop.chunkSize;
 		this.isOptimize = true;
@@ -94,7 +95,7 @@ public class HBTreeMultiThreadPutTest implements Runnable{
 			FileWriter resultWriter = null;
 			try {
 				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
-				resultWriter.write("\r\n\r\nchunkSize = "+HBTreeMultiThreadPutTest.chunkSize+"\r\n");
+				resultWriter.write("\r\n\r\nOptimize = "+HBTreeMultiThreadPutTest.isOptimize+" , chunkSize = "+HBTreeMultiThreadPutTest.chunkSize+"\r\n");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
