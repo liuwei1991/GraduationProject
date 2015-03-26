@@ -47,6 +47,8 @@ public class BPlusMultiThreadGetTest implements Runnable {
 					this.bskl.add(line[0],"column"+j, line[0]+","+line[j] );
 				}
 			}
+			br.close();
+			fr.close();
 		}
 	}
 

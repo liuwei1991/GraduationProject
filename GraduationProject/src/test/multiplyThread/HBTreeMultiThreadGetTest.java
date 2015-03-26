@@ -72,6 +72,8 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 					this.hbtree.add(line[0], CommonVariable.COLUMN + j, line[j]);
 				}
 			}
+			br.close();
+			fr.close();
 		}
 	}
 
@@ -96,6 +98,8 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 					this.hbtreeop.add(line[0], CommonVariable.COLUMN + j, line[j]);
 				}
 			}
+			br.close();
+			fr.close();
 		}
 	}
 

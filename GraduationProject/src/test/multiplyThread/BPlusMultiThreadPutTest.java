@@ -50,6 +50,8 @@ public class BPlusMultiThreadPutTest implements Runnable{
 					}
 				}
 			}
+			br.close();
+			fr.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}

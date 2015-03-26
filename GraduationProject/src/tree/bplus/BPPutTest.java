@@ -48,6 +48,8 @@ public class BPPutTest {
 //			System.out.println("key = "+key+" , keylen = "+key.length()+" , value = "+value);
 //			this.bskl.add(line[0], kvs);
 		}
+		br.close();
+		fr.close();
 		Long e = System.currentTimeMillis();
 		System.out.println("BSkipList - PutTest - total number: "+totalNum+" , Total time: "+(e-s)/1000.0+"s. Speed:"+totalNum*1000.0/(e-s)+" /second.");
 	}

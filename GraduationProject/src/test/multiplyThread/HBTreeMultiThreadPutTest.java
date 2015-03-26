@@ -80,6 +80,8 @@ public class HBTreeMultiThreadPutTest implements Runnable {
 					}
 				}
 			}
+			br.close();
+			fr.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
