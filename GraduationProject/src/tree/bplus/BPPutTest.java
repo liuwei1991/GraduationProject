@@ -27,7 +27,7 @@ public class BPPutTest {
 			return;
 		}
 		FileReader fr = new FileReader(file);
-		BufferedReader br = new BufferedReader(fr);
+		BufferedReader br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
 		
 		int totalNum = 0;
 		Long s = System.currentTimeMillis();

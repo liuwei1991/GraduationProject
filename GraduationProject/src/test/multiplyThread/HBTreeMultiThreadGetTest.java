@@ -58,7 +58,7 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 				return;
 			}
 			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
+			BufferedReader br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
 
 			while (true) {
 				String str = br.readLine();
@@ -83,7 +83,7 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 				return;
 			}
 			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
+			BufferedReader br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
 
 			while (true) {
 				String str = br.readLine();
@@ -109,7 +109,7 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 		}
 		try {
 			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
+			BufferedReader br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
 
 			while (true) {
 				String str = br.readLine();
@@ -117,7 +117,7 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 				// file.
 				if (str == null) {
 					fr = new FileReader(file);
-					br = new BufferedReader(fr);
+					br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
 					continue;
 					// break;
 				}

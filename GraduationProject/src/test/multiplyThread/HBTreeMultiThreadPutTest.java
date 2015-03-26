@@ -48,7 +48,7 @@ public class HBTreeMultiThreadPutTest implements Runnable {
 		}
 		try {
 			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
+			BufferedReader br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
 			if (this.isOptimize) {
 				while (true) {
 					String str = br.readLine();

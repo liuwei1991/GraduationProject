@@ -34,7 +34,7 @@ public class BPlusMultiThreadPutTest implements Runnable{
 		}
 		try{
 			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
+			BufferedReader br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
 			while(true){
 				String str = br.readLine();
 				if(str==null){
