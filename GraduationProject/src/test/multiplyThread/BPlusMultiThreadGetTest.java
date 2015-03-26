@@ -44,7 +44,7 @@ public class BPlusMultiThreadGetTest implements Runnable {
 				String[] line = str.split(" ");
 //				Map<String,String> kvs = new HashMap<String,String>();
 				for(int j=1;j<line.length;j++){
-					this.bskl.add(line[0],"column"+j, line[0]+","+line[j] );
+					this.bskl.add(line[0],CommonVariable.COLUMN+j, line[0]+","+line[j] );
 				}
 			}
 			br.close();
@@ -74,9 +74,8 @@ public class BPlusMultiThreadGetTest implements Runnable {
 //					break;
 				}
 				String[] line = str.split(" ");
-				String column = "q";
 				for(int i=1;i<line.length;i++){
-					this.bskl.get(line[0], column+i);
+					this.bskl.get(line[0], CommonVariable.COLUMN+i);
 					synchronized (BPlusMultiThreadGetTest.class) {
 						totalNum++;
 					}
