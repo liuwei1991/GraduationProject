@@ -99,7 +99,7 @@ public class BPlusMultiThreadPutTest implements Runnable{
 		}
 	};
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws InterruptedException{
 		Comparator<String> c = new Comparator<String>() {
 			@Override
 			public int compare(String o1, String o2) {
@@ -120,6 +120,9 @@ public class BPlusMultiThreadPutTest implements Runnable{
 			Thread t =  new Thread(btp);
 			t.setName(String.valueOf(i));
 			t.start();
+		}
+		while(BPlusMultiThreadPutTest.totalNum==0){
+			Thread.sleep(200);
 		}
 		output.setPriority(Thread.MAX_PRIORITY);
 		output.start();

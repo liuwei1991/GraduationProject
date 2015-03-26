@@ -133,7 +133,7 @@ public class HBTreeMultiThreadPutTest implements Runnable {
 		}
 	};
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		Comparator<String> c = new Comparator<String>() {
 			@Override
 			public int compare(String o1, String o2) {
@@ -165,6 +165,9 @@ public class HBTreeMultiThreadPutTest implements Runnable {
 			Thread t = new Thread(hbtp);
 			t.setName(String.valueOf(i));
 			t.start();
+		}
+		while(HBTreeMultiThreadPutTest.totalNum==0){
+			Thread.sleep(200);
 		}
 		output.setPriority(Thread.MAX_PRIORITY);
 		output.start();
