@@ -99,51 +99,6 @@ public class HBTree {
 		return true;
 	}
 
-	public static void printHBTree(Node node){
-		Queue<Node> queue = new LinkedList<Node>();
-		queue.add(node);
-		queue.add(null);
-		while(!queue.isEmpty()){
-			Node curNode = queue.poll();
-			if(curNode==null){
-				if(queue.isEmpty()){
-					return;
-				}
-				System.out.println();
-				continue;
-			}
-			ConcurrentNavigableMap<String, Node> nodeMap = curNode.getNextLayer();
-			for(Entry<String,Node> entry:nodeMap.entrySet()){
-				queue.add(entry.getValue());
-				System.out.print(entry.getKey()+"("+entry.getValue().isValue()+"),");
-			}
-			queue.add(null);
-			System.out.print("    ");
-		}
-	}
-	public static void printHBTree(NodeOptimize node){
-		Queue<NodeOptimize> queue = new LinkedList<NodeOptimize>();
-		queue.add(node);
-		queue.add(null);
-		while(!queue.isEmpty()){
-			NodeOptimize curNode = queue.poll();
-			if(curNode==null){
-				if(queue.isEmpty()){
-					return;
-				}
-				System.out.println();
-				continue;
-			}
-			ConcurrentNavigableMap<String, NodeOptimize> nodeMap = curNode.getNextLayer();
-			for(Entry<String,NodeOptimize> entry:nodeMap.entrySet()){
-				queue.add(entry.getValue());
-				System.out.print(entry.getKey()+"("+entry.getValue().isValue()+"),");
-			}
-			queue.add(null);
-			System.out.print("    ");
-		}
-	}
-	
 	public boolean delete(String key) {
 		int len = 0;
 		ConcurrentNavigableMap<String, Node> nodeMap = rootNode.getNextLayer();
@@ -221,6 +176,52 @@ public class HBTree {
 		}
 		for(Entry<String,Node> entry: children.entrySet()){
 			scanAll(result,entry.getValue(),prefix+entry.getKey());
+		}
+	}
+	
+	public static void printHBTree(Node node){
+		Queue<Node> queue = new LinkedList<Node>();
+		queue.add(node);
+		queue.add(null);
+		while(!queue.isEmpty()){
+			Node curNode = queue.poll();
+			if(curNode==null){
+				if(queue.isEmpty()){
+					return;
+				}
+				System.out.println();
+				continue;
+			}
+			ConcurrentNavigableMap<String, Node> nodeMap = curNode.getNextLayer();
+			for(Entry<String,Node> entry:nodeMap.entrySet()){
+				queue.add(entry.getValue());
+				System.out.print(entry.getKey()+"("+entry.getValue().isValue()+"),");
+			}
+			queue.add(null);
+			System.out.print("    ");
+		}
+	}
+	
+	public static void printHBTree(NodeOptimize node){
+		Queue<NodeOptimize> queue = new LinkedList<NodeOptimize>();
+		queue.add(node);
+		queue.add(null);
+		while(!queue.isEmpty()){
+			NodeOptimize curNode = queue.poll();
+			if(curNode==null){
+				if(queue.isEmpty()){
+					return;
+				}
+				System.out.println();
+				continue;
+			}
+			ConcurrentNavigableMap<String, NodeOptimize> nodeMap = curNode.getNextLayer();
+			for(Entry<String,NodeOptimize> entry:nodeMap.entrySet()){
+				queue.add(entry.getValue());
+				System.out.print(entry.getKey()+"("+entry.getValue().isValue()+"),");
+			}
+			queue.add(null);
+			System.out.print("    ");
 		}
 	}
 	
