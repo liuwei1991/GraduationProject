@@ -100,12 +100,14 @@ public class HBTreeMultiThreadPutTest implements Runnable {
 			try {
 				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,
 						true);
-				resultWriter.write("\r\n\r\nOptimize = "
+				String s = "\r\n\r\nOptimize = "
 						+ HBTreeMultiThreadPutTest.isOptimize
 						+ " , chunkSize = "
 						+ HBTreeMultiThreadPutTest.chunkSize
 						+ ", InputFilePath:"
-						+ HBTreeMultiThreadPutTest.inputFilePath + "\r\n");
+						+ HBTreeMultiThreadPutTest.inputFilePath + "\r\n";
+				resultWriter.write(s);
+				System.out.print(s);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

@@ -1,13 +1,14 @@
 package test.multiplyThread;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Comparator;
+import java.util.Date;
 
 import tree.bplus.BPlus;
 import tree.hb.HBTree;
 import tree.hb.HBTreeOptimize;
+import test.CommonVariable;
 import test.multiplyThread.BPlusMultiThreadPutTest.BPlusMetrics;
 import test.multiplyThread.HBTreeMultiThreadPutTest.HBTreeMetrics;
 
@@ -48,63 +49,65 @@ public class TestControl {
 		BPlusMultiThreadPutTest.output = new Thread(new BPlusMetrics());
 		BPlusMultiThreadPutTest.output.setPriority(Thread.MAX_PRIORITY);
 		BPlusMultiThreadPutTest.output.start();
-		;
 		BPlusMultiThreadPutTest.output.join();
 	}
 
 	public void BPlusMultiThreadPutTest() throws Exception {
 
 		int keylen[] = { 8, 16, 24, 32 };
-		int threadNum[] = { 24, 32 };
+		int threadNum[] = { 8,16,24, 32 };
 		int columnNum = 4;
 
-		for (int i = 2; i <= 5; i++) {
+		for (int i = 1; i <= 5; i++) {
 			for (int len : keylen) {
 				for (int tn : threadNum) {
 					System.gc();
-					InputStreamReader isReader = new InputStreamReader(
-							System.in);
-					System.out.println("Please input a String: ");
-					String str = new BufferedReader(isReader).readLine();
-					System.out.println("Input String: " + str);
+					Thread.sleep(10*1000);
+//					InputStreamReader isReader = new InputStreamReader(
+//							System.in);
+//					System.out.println("Please input a String: ");
+//					String str = new BufferedReader(isReader).readLine();
+//					System.out.println("Input String: " + str);
 
 					String inputFilePath = "/ares/TestData/t2/thread=" + tn
-							+ "/keylen=" + len + " columnNum="+columnNum+"/" + 1000 * i
-							+ "w/";
+							+ "/keylen=" + len + " columnNum=" + columnNum
+							+ "/" + 1000 * i + "w/";
 					int rowNum = i * 1000 * 10000;
-					this.BPlusSinglePutTest(rowNum, len, tn, columnNum, inputFilePath);
+					this.BPlusSinglePutTest(rowNum, len, tn, columnNum,
+							inputFilePath);
 				}
 			}
 		}
 	}
 
 	public void HBTreeMultiThreadPutTest() throws Exception {
-
 		int keylen[] = { 8, 16, 24, 32 };
-		int threadNum[] = { 24, 32 };
-		int chunkSize[] = {4,8,12,16,20,24};
+		int threadNum[] = { 8,16,24, 32 };
+		int chunkSize[] = { 4, 8, 12, 16, 20, 24, 28, 32};
 		boolean optimize = false;
 		int minLayerNum = 16;
 		int columnNum = 4;
-		
-		for (int i = 2; i <= 5; i++) {
+
+		for (int i = 1; i <= 5; i++) {
 			for (int len : keylen) {
 				for (int tn : threadNum) {
-					for(int cs:chunkSize){
+					for (int cs : chunkSize) {
+						if(cs>len) break;
 						System.gc();
-						InputStreamReader isReader = new InputStreamReader(
-								System.in);
-						System.out.println("Please input a String: ");
-						String str = new BufferedReader(isReader).readLine();
-						System.out.println("Input String: " + str);
+						Thread.sleep(10*1000);
 						
+//						InputStreamReader isReader = new InputStreamReader(
+//								System.in);
+//						System.out.println("Please input a String: ");
+//						String str = new BufferedReader(isReader).readLine();
+//						System.out.println("Input String: " + str);
+
 						String inputFilePath = "/ares/TestData/t2/thread=" + tn
-								+ "/keylen=" + len + " columnNum="+columnNum+"/" + 1000 * i
-								+ "w/";
+								+ "/keylen=" + len + " columnNum=" + columnNum
+								+ "/" + 1000 * i + "w/";
 						int rowNum = i * 1000 * 10000;
-						this.HBTreeSinglePutTest(rowNum, len, tn,
-								columnNum, cs, optimize, minLayerNum,
-								inputFilePath);
+						this.HBTreeSinglePutTest(rowNum, len, tn, columnNum,
+								cs, optimize, minLayerNum, inputFilePath);
 					}
 				}
 			}
@@ -148,7 +151,19 @@ public class TestControl {
 
 	public static void main(String[] args) throws Exception {
 		TestControl tc = new TestControl();
+
+		Date d = new Date(System.currentTimeMillis());
+		CommonVariable.RESULT_FILE_PATH = "/ares/result/bPlusResult-"
+				+ d.getYear() + "-" + "-" + d.getMonth() + "-" + d.getDay()
+				+ "-" + d.getHours() + "-" + d.getMinutes() +"-"+d.getSeconds()+ ".txt";
 		tc.BPlusMultiThreadPutTest();
+		
+		
+		d = new Date(System.currentTimeMillis());
+		CommonVariable.RESULT_FILE_PATH = "/ares/result/hbTreeResult-"
+				+ d.getYear() + "-" + "-" + d.getMonth() + "-" + d.getDay()
+				+ "-" + d.getHours() + "-" + d.getMinutes() +"-"+d.getSeconds()+ ".txt";
+		tc.HBTreeMultiThreadPutTest();
 	}
 
 }

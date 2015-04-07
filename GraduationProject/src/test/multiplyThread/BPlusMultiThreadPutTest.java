@@ -71,9 +71,11 @@ public class BPlusMultiThreadPutTest implements Runnable{
 			FileWriter resultWriter = null;
 			try {
 				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
-				resultWriter.write("\r\n\r\n\r\n"
+				String s = "\r\n\r\n\r\n"
 						+ "InputFilePath:"
-						+ BPlusMultiThreadPutTest.inputFilePath + "\r\n");
+						+ BPlusMultiThreadPutTest.inputFilePath + "\r\n";
+				resultWriter.write(s);
+				System.out.print(s);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
