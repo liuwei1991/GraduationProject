@@ -153,6 +153,7 @@ public class TestControl {
 		TestControl tc = new TestControl();
 
 		Date d = new Date(System.currentTimeMillis());
+		
 		CommonVariable.RESULT_FILE_PATH = "/ares/result/bPlusResult-"
 				+ d.getYear() + "-" + "-" + d.getMonth() + "-" + d.getDay()
 				+ "-" + d.getHours() + "-" + d.getMinutes() +"-"+d.getSeconds()+ ".txt";
