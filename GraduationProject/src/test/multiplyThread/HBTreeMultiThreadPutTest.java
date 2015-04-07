@@ -21,7 +21,7 @@ public class HBTreeMultiThreadPutTest implements Runnable {
 	private HBTreeOptimize hbtreeop;
 	private static String inputFilePath;
 	private static boolean isOptimize = false;
-	private static int totalNum = 0;
+	public static int totalNum = 0;
 	public static int chunkSize = 0;
 
 	public HBTreeMultiThreadPutTest(HBTree hbtree, String inputFilePath) {
@@ -90,8 +90,11 @@ public class HBTreeMultiThreadPutTest implements Runnable {
 	static long time = System.currentTimeMillis();
 	static long startTime = time;
 	static long lastNum = 0;
-
-	public static Thread output = new Thread() {
+	static long targetNum = 0;
+	public static Thread output = new Thread(new HBTreeMetrics());
+	
+	public static class HBTreeMetrics implements Runnable{
+		@Override
 		public void run() {
 			FileWriter resultWriter = null;
 			try {
@@ -106,23 +109,25 @@ public class HBTreeMultiThreadPutTest implements Runnable {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			String r = null;
+			StringBuilder r = new StringBuilder();
 			while (true) {
 				try {
-					sleep(2000);
+					Thread.sleep(2000);
 					long current = totalNum;
-					r = "HBTreePut - StartTime:" + time + "  Now:"
-							+ System.currentTimeMillis() + "  putNum :"
-							+ current + "  CurrentSpeed:"
-							+ ((current - lastNum) * 1000)
-							/ (System.currentTimeMillis() - time)
-							+ "  TotalSpeed:" + (current * 1000)
-							/ (System.currentTimeMillis() - startTime) + " r/s";
+					r.delete(0, r.length());
+					r.append("HBTreePut - StartTime:").append(time).append("  Now:").append(System.currentTimeMillis()).append("  putNum :")
+					.append(current).append("  CurrentSpeed:").append(((current - lastNum) * 1000)
+			            / (System.currentTimeMillis() - time)).append("  TotalSpeed:").append((current * 1000) / (System.currentTimeMillis() - startTime))
+					 .append(" r/s");
+					
 					time = System.currentTimeMillis();
-					lastNum = current;
 					System.out.println(r);
 					resultWriter.write(r + "\r\n");
-					resultWriter.flush();
+					if(current>=targetNum || current-lastNum==0 && (targetNum-current)<targetNum/100){
+			        	resultWriter.flush();
+			        	break;
+			        }
+			        lastNum = current;
 				} catch (Exception e) {
 					e.printStackTrace();
 					try {
@@ -133,7 +138,8 @@ public class HBTreeMultiThreadPutTest implements Runnable {
 				}
 			}
 		}
-	};
+	}
+
 
 	public static void main(String[] args) throws InterruptedException {
 		Comparator<String> c = new Comparator<String>() {
@@ -148,9 +154,9 @@ public class HBTreeMultiThreadPutTest implements Runnable {
 			}
 		};
 
-		String inputFilePath = "/TestData/t2/keylen=16 columnNum=1/500w/";
-		int chunkSize = 6;
-		int threadNum = 10;
+		String inputFilePath = "/ares/TestData/t2/keylen=32 columnNum=4/3000w/";
+		int chunkSize = 12;
+		int threadNum = 24 ;
 		boolean optimize = false;
 		int minLayerNum = 16;
 

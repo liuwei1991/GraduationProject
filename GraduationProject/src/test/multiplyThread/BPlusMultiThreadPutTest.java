@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ import tree.bplus.BPlus;
 public class BPlusMultiThreadPutTest implements Runnable{
 	private BPlus bskl;
 	private static String inputFilePath;
-	private static int totalNum = 0;
+	public static int totalNum = 0;
 	
 	public BPlusMultiThreadPutTest(BPlus bskl,String inputFilePath){
 		this.bskl = bskl;
@@ -61,9 +62,12 @@ public class BPlusMultiThreadPutTest implements Runnable{
 	static long time = System.currentTimeMillis();
 	static long startTime = time;
 	static long lastNum = 0;
+	static long targetNum = 0;
+	public static Thread output =  new Thread(new BPlusMetrics());
 	
-	public static Thread output =  new Thread(){
-		public void run(){
+	public static class BPlusMetrics implements Runnable{
+		@Override
+		public void run() {
 			FileWriter resultWriter = null;
 			try {
 				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
@@ -73,22 +77,24 @@ public class BPlusMultiThreadPutTest implements Runnable{
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			String r = null;
+			StringBuilder r = new StringBuilder();
 			while(true){
 				try {
-					sleep(2000);
+					Thread.sleep(2000);
 					long current = totalNum;
-					r= "BPlusPut - StartTime:" + time + "  Now:"
-			            + System.currentTimeMillis() + "  putNum :" + current
-			            + "  CurrentSpeed:" + ((current - lastNum) * 1000)
-			            / (System.currentTimeMillis() - time) + "  TotalSpeed:"
-			            + (current * 1000) / (System.currentTimeMillis() - startTime)
-			            + " r/s";
+					r.delete(0, r.length());
+					r.append("BPlusPut - StartTime:").append(time).append("  Now:").append(System.currentTimeMillis()).append("  putNum :")
+					.append(current).append("  CurrentSpeed:").append(((current - lastNum) * 1000)
+			            / (System.currentTimeMillis() - time)).append("  TotalSpeed:").append((current * 1000) / (System.currentTimeMillis() - startTime))
+					 .append(" r/s");
 			        time = System.currentTimeMillis();
-			        lastNum = current;
 			        System.out.println(r);
 			        resultWriter.write(r+"\r\n");
-			        resultWriter.flush();
+			        if(current>=targetNum || current-lastNum==0 && (targetNum-current)<targetNum/100){
+			        	resultWriter.flush();
+			        	break;
+			        }
+			        lastNum = current;
 				} catch (Exception e) {
 					e.printStackTrace();
 					try {
@@ -98,10 +104,11 @@ public class BPlusMultiThreadPutTest implements Runnable{
 					}
 				}
 			}
+		
 		}
-	};
+	}
 	
-	public static void main(String[] args) throws InterruptedException{
+	public static void main(String[] args) throws InterruptedException, IOException{
 		Comparator<String> c = new Comparator<String>() {
 			@Override
 			public int compare(String o1, String o2) {
@@ -113,20 +120,39 @@ public class BPlusMultiThreadPutTest implements Runnable{
 				return 1;
 			}
 		};
-		String inputFilePath = "/TestData/t2/keylen=16 columnNum=1/500w/";
-		int threadNum = 10; 
 		
-		BPlus bp = new BPlus(c);
-		BPlusMultiThreadPutTest btp = new BPlusMultiThreadPutTest(bp,inputFilePath);
-		for(int i=0;i<threadNum;i++){
-			Thread t =  new Thread(btp);
-			t.setName(String.valueOf(i));
-			t.start();
+		int keylen[] = {8,16,24,32};
+		int threadNum[] ={8,16,24,32}; 
+		
+		for(int i=1;i<=5;i++){
+			for(int len:keylen){
+				for(int tn:threadNum){
+					String inputFilePath = "/ares/TestData/t2/thread="+tn+"/keylen="+len+" columnNum=4/"+1000*i+"w/";
+					
+					BPlus bp = new BPlus(c);
+					BPlusMultiThreadPutTest btp = new BPlusMultiThreadPutTest(bp,inputFilePath);
+					
+					System.gc();
+					InputStreamReader isReader = new InputStreamReader(System.in);
+					String str = new BufferedReader(isReader).readLine();
+					System.out.println("Input String: "+str);
+					
+					for(int j=0;i<tn;i++){
+						Thread t =  new Thread(btp);
+						t.setName(String.valueOf(j));
+						t.start();
+					}
+					while(BPlusMultiThreadPutTest.totalNum==0){
+						Thread.sleep(200);
+					}
+					BPlusMultiThreadPutTest.time = System.currentTimeMillis();
+					BPlusMultiThreadPutTest.startTime = BPlusMultiThreadPutTest.time;
+					BPlusMultiThreadPutTest.targetNum = i*1000*10000;
+					output.setPriority(Thread.MAX_PRIORITY);
+					output.start();
+					output.join();
+				}
+			}
 		}
-		while(BPlusMultiThreadPutTest.totalNum==0){
-			Thread.sleep(200);
-		}
-		output.setPriority(Thread.MAX_PRIORITY);
-		output.start();
 	}
 }
