@@ -90,9 +90,9 @@ public class BPlusMultiThreadGetTest implements Runnable {
 	static long startTime = time;
 	static long lastNum = 0;
 	public static long targetNum = 0;
+	public static Thread output = new Thread(new BPlusGetMetrics());
 
 	public static class BPlusGetMetrics implements Runnable{
-
 		@Override
 		public void run() {
 			FileWriter resultWriter = null;
@@ -112,7 +112,7 @@ public class BPlusMultiThreadGetTest implements Runnable {
 					Thread.sleep(2000);
 					long current = totalNum;
 					r.delete(0, r.length());
-					r.append("BPlusGet - StartTime:").append(time).append("  Now:").append(System.currentTimeMillis()).append("  putNum :")
+					r.append("BPlusGet - StartTime:").append(time).append("  Now:").append(System.currentTimeMillis()).append("  getNum :")
 					.append(current).append("  CurrentSpeed:").append(((current - lastNum) * 1000)
 			            / (System.currentTimeMillis() - time)).append("  TotalSpeed:").append((current * 1000) / (System.currentTimeMillis() - startTime))
 					 .append(" r/s");
@@ -135,9 +135,9 @@ public class BPlusMultiThreadGetTest implements Runnable {
 			}
 		}
 	}
-	
-	public static Thread output = new Thread(new BPlusGetMetrics());
 
+	
+	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		Comparator<String> c = new Comparator<String>() {
 			@Override

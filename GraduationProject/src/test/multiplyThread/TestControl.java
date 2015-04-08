@@ -9,8 +9,10 @@ import tree.bplus.BPlus;
 import tree.hb.HBTree;
 import tree.hb.HBTreeOptimize;
 import test.CommonVariable;
-import test.multiplyThread.BPlusMultiThreadPutTest.BPlusMetrics;
-import test.multiplyThread.HBTreeMultiThreadPutTest.HBTreeMetrics;
+import test.multiplyThread.HBTreeMultiThreadPutTest.HBTreePutMetrics;
+import test.multiplyThread.HBTreeMultiThreadGetTest.HBTreeGetMetrics;
+import test.multiplyThread.BPlusMultiThreadPutTest.BPlusPutMetrics;
+import test.multiplyThread.BPlusMultiThreadGetTest.BPlusGetMetrics;
 
 public class TestControl {
 
@@ -37,9 +39,9 @@ public class TestControl {
 		int threadNum[] = { 8,16,24, 32 };
 		int columnNum = 4;
 		
-		for (int i = 1; i <= 5; i++) {
-			for (int len : keylen) {
-				for (int tn : threadNum) {
+		for (int tn : threadNum) {
+			for (int i = 1; i <= 5; i++) {
+				for (int len : keylen) {
 					System.gc();
 					Thread.sleep(5*1000);
 					String inputFilePath = "/ares/TestData/t2/thread=" + tn
@@ -83,7 +85,7 @@ public class TestControl {
 		BPlusMultiThreadGetTest.totalNum = 0;
 		BPlusMultiThreadGetTest.lastNum = 0;
 
-		BPlusMultiThreadGetTest.output = new Thread(new BPlusMetrics());
+		BPlusMultiThreadGetTest.output = new Thread(new BPlusGetMetrics());
 		BPlusMultiThreadGetTest.output.setPriority(Thread.MAX_PRIORITY);
 		BPlusMultiThreadGetTest.output.start();
 		BPlusMultiThreadGetTest.output.join();
@@ -110,7 +112,7 @@ public class TestControl {
 		BPlusMultiThreadPutTest.totalNum = 0;
 		BPlusMultiThreadPutTest.lastNum = 0;
 
-		BPlusMultiThreadPutTest.output = new Thread(new BPlusMetrics());
+		BPlusMultiThreadPutTest.output = new Thread(new BPlusPutMetrics());
 		BPlusMultiThreadPutTest.output.setPriority(Thread.MAX_PRIORITY);
 		BPlusMultiThreadPutTest.output.start();
 		BPlusMultiThreadPutTest.output.join();
@@ -127,18 +129,12 @@ public class TestControl {
 		int threadNum[] = { 8,16,24, 32 };
 		int columnNum = 4;
 		
-		for (int i = 1; i <= 5; i++) {
-			for (int len : keylen) {
-				for (int tn : threadNum) {
+		for (int tn : threadNum) {
+			for (int i = 1; i <= 5; i++) {
+				for (int len : keylen) {
 					System.gc();
 					Thread.sleep(5*1000);
 					
-//					InputStreamReader isReader = new InputStreamReader(
-//							System.in);
-//					System.out.println("Please input a String: ");
-//					String str = new BufferedReader(isReader).readLine();
-//					System.out.println("Input String: " + str);
-
 					String inputFilePath = "/ares/TestData/t2/thread=" + tn
 							+ "/keylen=" + len + " columnNum=" + columnNum
 							+ "/" + 1000 * i + "w/";
@@ -158,17 +154,17 @@ public class TestControl {
 				+ d.getYear() + "-" + "-" + d.getMonth() + "-" + d.getDay()
 				+ "-" + d.getHours() + ":" + d.getMinutes() +":"+d.getSeconds()+ ".txt";
 		
-		int keylen[] = { 8, 16, 24, 32 };
 		int threadNum[] = { 8,16,24,32};
 		int chunkSize[] = { 32,28,24,20,16,12,8,4};
+		int keylen[] = { 8,16,24,32 };
 		boolean optimize = false;
 		int minLayerNum = 16;
 		int columnNum = 4;
 
 		for (int tn : threadNum) {
-			for (int cs : chunkSize) {
-				for (int len : keylen) {
-					for (int i = 1; i <= 5; i++) {
+			for (int i = 1; i <= 5; i++) {
+				for (int cs : chunkSize) {
+					for (int len : keylen) {
 						if(cs>len) break;
 						System.gc();
 						Thread.sleep(5*1000);
@@ -227,7 +223,7 @@ public class TestControl {
 		HBTreeMultiThreadGetTest.startTime = System.currentTimeMillis();
 		HBTreeMultiThreadGetTest.time = HBTreeMultiThreadPutTest.startTime;
 
-		HBTreeMultiThreadGetTest.output = new Thread(new HBTreeMetrics());
+		HBTreeMultiThreadGetTest.output = new Thread(new HBTreeGetMetrics());
 		HBTreeMultiThreadGetTest.output.setPriority(Thread.MAX_PRIORITY);
 		HBTreeMultiThreadGetTest.output.start();
 		HBTreeMultiThreadGetTest.output.join();
@@ -247,23 +243,18 @@ public class TestControl {
 		int columnNum = 4;
 
 		for (int tn : threadNum) {
-			for (int cs : chunkSize) {
-				for (int len : keylen) {
-					for (int i = 1; i <= 5; i++) {
+			for (int i = 1; i <= 5; i++) {
+				for (int cs : chunkSize) {
+					for (int len : keylen) {
 						if(cs>len) break;
 						System.gc();
 						Thread.sleep(5*1000);
 						
-//						InputStreamReader isReader = new InputStreamReader(
-//								System.in);
-//						System.out.println("Please input a String: ");
-//						String str = new BufferedReader(isReader).readLine();
-//						System.out.println("Input String: " + str);
-
 						String inputFilePath = "/ares/TestData/t2/thread=" + tn
 								+ "/keylen=" + len + " columnNum=" + columnNum
 								+ "/" + 1000 * i + "w/";
 						int rowNum = i * 1000 * 10000;
+						
 						HBTreeMultiThreadPutTest hbtp = null;
 						if (optimize) {
 							HBTreeOptimize hbtreeop = new HBTreeOptimize(c, cs,
@@ -273,6 +264,7 @@ public class TestControl {
 							HBTree hbtree = new HBTree(c, cs);
 							hbtp = new HBTreeMultiThreadPutTest(hbtree, inputFilePath);
 						}
+						
 						this.hbTreeSinglePutTest(hbtp,rowNum, tn, columnNum, inputFilePath);
 					}
 				}
@@ -298,30 +290,18 @@ public class TestControl {
 		HBTreeMultiThreadPutTest.startTime = System.currentTimeMillis();
 		HBTreeMultiThreadPutTest.time = HBTreeMultiThreadPutTest.startTime;
 
-		HBTreeMultiThreadPutTest.output = new Thread(new HBTreeMetrics());
+		HBTreeMultiThreadPutTest.output = new Thread(new HBTreePutMetrics());
 		HBTreeMultiThreadPutTest.output.setPriority(Thread.MAX_PRIORITY);
 		HBTreeMultiThreadPutTest.output.start();
 		HBTreeMultiThreadPutTest.output.join();
 	}
 
 	public static void main(String[] args) throws Exception {
-		Comparator<String> c = new Comparator<String>() {
-			@Override
-			public int compare(String o1, String o2) {
-				if (o1.compareTo(o2) < 0) {
-					return -1;
-				} else if (o1.compareTo(o2) == 0) {
-					return 0;
-				}
-				return 1;
-			}
-		};
-		
 		TestControl tc = new TestControl();
 //		tc.bPlusMultiPutTest();
 //		tc.hbTreeMultiPutTest();
-		tc.bPlusMultiGetTest();
-//		tc.hbTreeMultiGetTest();
+//		tc.bPlusMultiGetTest();
+		tc.hbTreeMultiGetTest();
 	}
 
 }

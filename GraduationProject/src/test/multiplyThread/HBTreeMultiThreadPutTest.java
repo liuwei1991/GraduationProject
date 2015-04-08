@@ -103,9 +103,9 @@ public class HBTreeMultiThreadPutTest implements Runnable {
 	static long startTime = time;
 	static long lastNum = 0;
 	static long targetNum = 0;
-	public static Thread output = new Thread(new HBTreeMetrics());
+	public static Thread output = new Thread(new HBTreePutMetrics());
 	
-	public static class HBTreeMetrics implements Runnable{
+	public static class HBTreePutMetrics implements Runnable{
 		@Override
 		public void run() {
 			FileWriter resultWriter = null;

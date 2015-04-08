@@ -167,7 +167,7 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 					Thread.sleep(2000);
 					long current = totalNum;
 					r.delete(0, r.length());
-					r.append("HBTreeGet - StartTime:").append(time).append("  Now:").append(System.currentTimeMillis()).append("  putNum :")
+					r.append("HBTreeGet - StartTime:").append(time).append("  Now:").append(System.currentTimeMillis()).append("  getNum :")
 					.append(current).append("  CurrentSpeed:").append(((current - lastNum) * 1000)
 			            / (System.currentTimeMillis() - time)).append("  TotalSpeed:").append((current * 1000) / (System.currentTimeMillis() - startTime))
 					 .append(" r/s");
