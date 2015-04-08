@@ -18,7 +18,7 @@ public class BPlusMultiThreadGetTest implements Runnable {
 	private BPlus bskl;
 	private static String inputFilePath;
 	private int threadNum;
-	private static int totalNum = 0;
+	public static int totalNum = 0;
 	
 	public BPlusMultiThreadGetTest(BPlus bskl, String inputFilePath,int threadNum) {
 		this.bskl = bskl;
@@ -68,10 +68,10 @@ public class BPlusMultiThreadGetTest implements Runnable {
 				String str = br.readLine();
 				// if reach the end of the file, the start from the begin of the file.
 				if (str == null) {
-					fr = new FileReader(file);
-					br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
-					continue;
-//					break;
+//					fr = new FileReader(file);
+//					br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
+//					continue;
+					break;
 				}
 				String[] line = str.split(" ");
 				for(int i=1;i<line.length;i++){
@@ -89,37 +89,41 @@ public class BPlusMultiThreadGetTest implements Runnable {
 	static long time = System.currentTimeMillis();
 	static long startTime = time;
 	static long lastNum = 0;
+	public static long targetNum = 0;
 
-	public static Thread output = new Thread() {
-		
+	public static class BPlusGetMetrics implements Runnable{
+
+		@Override
 		public void run() {
 			FileWriter resultWriter = null;
 			try {
 				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
-				resultWriter.write("\r\n\r\n\r\n"
+				String s = "\r\n\r\n\r\n"
 						+ "InputFilePath:"
-						+ BPlusMultiThreadGetTest.inputFilePath + "\r\n");
+						+ BPlusMultiThreadGetTest.inputFilePath + "\r\n";
+				resultWriter.write(s);
+				System.out.print(s);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			String r = null;
+			StringBuilder r = new StringBuilder();
 			while (true) {
 				try {
-					sleep(2000);
+					Thread.sleep(2000);
 					long current = totalNum;
-					r = "BPlusGet - StartTime:" + time + " Now:"
-									+ System.currentTimeMillis() + " getNum :"
-									+ current + " CurrentSpeed:"
-									+ ((current - lastNum) * 1000)
-									/ (System.currentTimeMillis() - time)
-									+ "  TotalSpeed:" + (current * 1000)
-									/ (System.currentTimeMillis() - startTime)
-									+ " r/s";
-					time = System.currentTimeMillis();
-					lastNum = current;
-					System.out.println(r);
+					r.delete(0, r.length());
+					r.append("BPlusGet - StartTime:").append(time).append("  Now:").append(System.currentTimeMillis()).append("  putNum :")
+					.append(current).append("  CurrentSpeed:").append(((current - lastNum) * 1000)
+			            / (System.currentTimeMillis() - time)).append("  TotalSpeed:").append((current * 1000) / (System.currentTimeMillis() - startTime))
+					 .append(" r/s");
+			        time = System.currentTimeMillis();
+			        System.out.println(r);
 					resultWriter.write(r+"\r\n");
-					resultWriter.flush();
+					if(current>=targetNum || current-lastNum==0 && (targetNum-current)<targetNum/100){
+			        	resultWriter.flush();
+			        	break;
+			        }
+			        lastNum = current;
 				} catch (Exception e) {
 					e.printStackTrace();
 					try {
@@ -130,7 +134,9 @@ public class BPlusMultiThreadGetTest implements Runnable {
 				}
 			}
 		}
-	};
+	}
+	
+	public static Thread output = new Thread(new BPlusGetMetrics());
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		Comparator<String> c = new Comparator<String>() {

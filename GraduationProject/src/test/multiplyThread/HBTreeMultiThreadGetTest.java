@@ -19,7 +19,7 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 	private HBTree hbtree;
 	private static String inputFilePath;
 	private int threadNum;
-	private static int totalNum = 0;
+	public static int totalNum = 0;
 	private HBTreeOptimize hbtreeop;
 	private static boolean isOptimize = false;
 	public static int chunkSize = 0;
@@ -120,10 +120,10 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 				// if reach the end of the file, the start from the begin of the
 				// file.
 				if (str == null) {
-					fr = new FileReader(file);
-					br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
-					continue;
-					// break;
+//					fr = new FileReader(file);
+//					br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
+//					continue;
+					break;
 				}
 				String[] lines = str.split(" ");
 				for (int j = 1; j < lines.length; j++) {
@@ -141,39 +141,45 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 	static long time = System.currentTimeMillis();
 	static long startTime = time;
 	static long lastNum = 0;
-
-	public static Thread output = new Thread() {
+	static long targetNum = 0;
+	
+	public static class HBTreeGetMetrics implements Runnable{
+		@Override
 		public void run() {
 			FileWriter resultWriter = null;
 			try {
 				resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,
 						true);
-				resultWriter.write("\r\n\r\nOptimize = "
+				String r = "\r\n\r\nOptimize = "
 						+ HBTreeMultiThreadGetTest.isOptimize
 						+ " , chunkSize = "
 						+ HBTreeMultiThreadGetTest.chunkSize
 						+ ", InputFilePath:"
-						+ HBTreeMultiThreadGetTest.inputFilePath + "\r\n");
+						+ HBTreeMultiThreadGetTest.inputFilePath + "\r\n";
+				resultWriter.write(r);
+				System.out.print(r);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			String r = null;
+			StringBuilder r = new StringBuilder();
 			while (true) {
 				try {
-					sleep(2000);
+					Thread.sleep(2000);
 					long current = totalNum;
-					r = "HBTreeGet - StartTime:" + time + "  Now:"
-							+ System.currentTimeMillis() + " getNum :"
-							+ current + "  CurrentSpeed:"
-							+ ((current - lastNum) * 1000)
-							/ (System.currentTimeMillis() - time)
-							+ "  TotalSpeed:" + (current * 1000)
-							/ (System.currentTimeMillis() - startTime) + " r/s";
+					r.delete(0, r.length());
+					r.append("HBTreeGet - StartTime:").append(time).append("  Now:").append(System.currentTimeMillis()).append("  putNum :")
+					.append(current).append("  CurrentSpeed:").append(((current - lastNum) * 1000)
+			            / (System.currentTimeMillis() - time)).append("  TotalSpeed:").append((current * 1000) / (System.currentTimeMillis() - startTime))
+					 .append(" r/s");
+					
 					time = System.currentTimeMillis();
-					lastNum = current;
 					System.out.println(r);
 					resultWriter.write(r + "\r\n");
-					resultWriter.flush();
+					if(current>=targetNum || current-lastNum==0 && (targetNum-current)<targetNum/100){
+			        	resultWriter.flush();
+			        	break;
+			        }
+			        lastNum = current;
 				} catch (Exception e) {
 					e.printStackTrace();
 					try {
@@ -184,7 +190,9 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 				}
 			}
 		}
-	};
+	}
+	
+	public static Thread output = new Thread(new HBTreeGetMetrics());
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		Comparator<String> c = new Comparator<String>() {
