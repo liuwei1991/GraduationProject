@@ -93,7 +93,7 @@ public class BPlusMultiThreadPutTest implements Runnable{
 			        System.out.println(r);
 			        resultWriter.write(r+"\r\n");
 			        if(current>=targetNum || current-lastNum==0 && (targetNum-current)<targetNum/100){
-			        	resultWriter.flush();
+			        	resultWriter.close();
 			        	break;
 			        }
 			        lastNum = current;

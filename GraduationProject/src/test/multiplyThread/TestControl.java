@@ -1,6 +1,7 @@
 package test.multiplyThread;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.Comparator;
 import java.util.Date;
@@ -56,11 +57,19 @@ public class TestControl {
 					
 					//Call gc, record the memory used.
 					System.gc();
-					InputStreamReader isReader = new InputStreamReader(
-							System.in);
-					System.out.println("Record the memory used and the data info,then input a string: ");
-					String str = new BufferedReader(isReader).readLine();
-					System.out.println("Input String: " + str);
+					
+					Runtime run = Runtime.getRuntime();
+					long usedMemory = run.totalMemory()-run.freeMemory();
+					System.out.println("Used Memory: "+usedMemory);
+					FileWriter resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
+					resultWriter.write("\r\nUsed Memory: "+usedMemory);
+					resultWriter.close();
+					
+//					InputStreamReader isReader = new InputStreamReader(
+//							System.in);
+//					System.out.println("Record the memory used and the data info,then input a string: ");
+//					String str = new BufferedReader(isReader).readLine();
+//					System.out.println("Input String: " + str);
 					//
 					this.bPlusSingleGetTest(bp, tn, rowNum, columnNum, inputFilePath);
 				}
@@ -157,43 +166,77 @@ public class TestControl {
 		int threadNum[] = { 8,16,24,32};
 		int chunkSize[] = { 32,28,24,20,16,12,8,4};
 		int keylen[] = { 8,16,24,32 };
-		boolean optimize = false;
-		int minLayerNum = 16;
+		boolean optimize[] = {false,true};
+		int minLayerNum[] = {64,128,256,512,1024};
 		int columnNum = 4;
-
-		for (int tn : threadNum) {
-			for (int i = 1; i <= 5; i++) {
-				for (int cs : chunkSize) {
-					for (int len : keylen) {
-						if(cs>len) break;
-						System.gc();
-						Thread.sleep(5*1000);
-						String inputFilePath = "/ares/TestData/t2/thread=" + tn
-								+ "/keylen=" + len + " columnNum=" + columnNum
-								+ "/" + 1000 * i + "w/";
-						int rowNum = i * 1000 * 10000;
-						HBTreeMultiThreadPutTest hbtp = null;
-						if (optimize) {
-							HBTreeOptimize hbtreeop = new HBTreeOptimize(c, cs,
-									minLayerNum);
-							hbtp = new HBTreeMultiThreadPutTest(hbtreeop, inputFilePath);
-						} else {
-							HBTree hbtree = new HBTree(c, cs);
-							hbtp = new HBTreeMultiThreadPutTest(hbtree, inputFilePath);
+		
+		for(boolean opt:optimize){
+			for (int tn : threadNum) {
+				for (int i = 1; i <= 5; i++) {
+					for (int cs : chunkSize) {
+						for (int len : keylen) {
+							if(cs>len) break;
+							Thread.sleep(5*1000);
+							String inputFilePath = "/ares/TestData/t2/thread=" + tn
+									+ "/keylen=" + len + " columnNum=" + columnNum
+									+ "/" + 1000 * i + "w/";
+							int rowNum = i * 1000 * 10000;
+							HBTreeMultiThreadPutTest hbtp = null;
+							if (opt) {
+								for(int minLayer:minLayerNum){
+									System.gc();
+									HBTreeOptimize hbtreeop = new HBTreeOptimize(c, cs, minLayer);
+									hbtp = new HBTreeMultiThreadPutTest(hbtreeop, inputFilePath);
+									
+									//Input data first.
+									this.hbTreeSinglePutTest(hbtp,rowNum, tn, columnNum, inputFilePath);
+									
+									//Call gc, record the memory used.
+									System.gc();
+									
+									Runtime run = Runtime.getRuntime();
+									long usedMemory = run.totalMemory()-run.freeMemory();
+									System.out.println("Used Memory: "+usedMemory);
+									FileWriter resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
+									resultWriter.write("\r\nUsed Memory: "+usedMemory);
+									resultWriter.close();
+									
+									InputStreamReader isReader = new InputStreamReader(
+											System.in);
+									System.out.println("Record the memory used and the data info,then input a string: ");
+									String str = new BufferedReader(isReader).readLine();
+									System.out.println("Input String: " + str);
+									//
+									this.hbTreeSingleGetTest(hbtp, tn, rowNum, columnNum, inputFilePath);
+								}
+								
+							} else {
+								System.gc();
+								HBTree hbtree = new HBTree(c, cs);
+								hbtp = new HBTreeMultiThreadPutTest(hbtree, inputFilePath);
+								//Input data first.
+								this.hbTreeSinglePutTest(hbtp,rowNum, tn, columnNum, inputFilePath);
+								
+								//Call gc, record the memory used.
+								System.gc();
+								
+								Runtime run = Runtime.getRuntime();
+								long usedMemory = run.totalMemory()-run.freeMemory();
+								System.out.println("Used Memory: "+usedMemory);
+								FileWriter resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
+								resultWriter.write("\r\nUsed Memory: "+usedMemory);
+								resultWriter.close();
+								
+//								InputStreamReader isReader = new InputStreamReader(
+//										System.in);
+//								System.out.println("Record the memory used and the data info,then input a string: ");
+//								String str = new BufferedReader(isReader).readLine();
+//								System.out.println("Input String: " + str);
+								//
+								this.hbTreeSingleGetTest(hbtp, tn, rowNum, columnNum, inputFilePath);
+							}
+							
 						}
-						
-						//Input data first.
-						this.hbTreeSinglePutTest(hbtp,rowNum, tn, columnNum, inputFilePath);
-						
-						//Call gc, record the memory used.
-						System.gc();
-						InputStreamReader isReader = new InputStreamReader(
-								System.in);
-						System.out.println("Record the memory used and the data info,then input a string: ");
-						String str = new BufferedReader(isReader).readLine();
-						System.out.println("Input String: " + str);
-						//
-						this.hbTreeSingleGetTest(hbtp, tn, rowNum, columnNum, inputFilePath);
 					}
 				}
 			}
@@ -217,11 +260,11 @@ public class TestControl {
 			Thread.sleep(200);
 		}
 
+		HBTreeMultiThreadGetTest.time = System.currentTimeMillis();
+		HBTreeMultiThreadGetTest.startTime = HBTreeMultiThreadGetTest.time;
+		HBTreeMultiThreadGetTest.targetNum = columnNum * rowNum;
 		HBTreeMultiThreadGetTest.lastNum = 0;
 		HBTreeMultiThreadGetTest.totalNum = 0;
-		HBTreeMultiThreadGetTest.targetNum = columnNum * rowNum;
-		HBTreeMultiThreadGetTest.startTime = System.currentTimeMillis();
-		HBTreeMultiThreadGetTest.time = HBTreeMultiThreadPutTest.startTime;
 
 		HBTreeMultiThreadGetTest.output = new Thread(new HBTreeGetMetrics());
 		HBTreeMultiThreadGetTest.output.setPriority(Thread.MAX_PRIORITY);
@@ -238,37 +281,40 @@ public class TestControl {
 		int threadNum[] = { 8,16,24, 32};
 		int chunkSize[] = { 32,28,24,20,16,12,8,4};
 		int keylen[] = { 8, 16, 24, 32 };
-		boolean optimize = false;
-		int minLayerNum = 16;
+		boolean optimize[] = {false,true};
+		int minLayerNum[] = {64,128,256,512,1024};
 		int columnNum = 4;
-
-		for (int tn : threadNum) {
-			for (int i = 1; i <= 5; i++) {
-				for (int cs : chunkSize) {
-					for (int len : keylen) {
-						if(cs>len) break;
-						System.gc();
-						Thread.sleep(5*1000);
-						
-						String inputFilePath = "/ares/TestData/t2/thread=" + tn
-								+ "/keylen=" + len + " columnNum=" + columnNum
-								+ "/" + 1000 * i + "w/";
-						int rowNum = i * 1000 * 10000;
-						
-						HBTreeMultiThreadPutTest hbtp = null;
-						if (optimize) {
-							HBTreeOptimize hbtreeop = new HBTreeOptimize(c, cs,
-									minLayerNum);
-							hbtp = new HBTreeMultiThreadPutTest(hbtreeop, inputFilePath);
-						} else {
-							HBTree hbtree = new HBTree(c, cs);
-							hbtp = new HBTreeMultiThreadPutTest(hbtree, inputFilePath);
+		for(boolean opt:optimize){
+			for (int tn : threadNum) {
+				for (int i = 1; i <= 5; i++) {
+					for (int cs : chunkSize) {
+						for (int len : keylen) {
+							if(cs>len) break;
+							System.gc();
+							Thread.sleep(5*1000);
+							
+							String inputFilePath = "/ares/TestData/t2/thread=" + tn
+									+ "/keylen=" + len + " columnNum=" + columnNum
+									+ "/" + 1000 * i + "w/";
+							int rowNum = i * 1000 * 10000;
+							
+							HBTreeMultiThreadPutTest hbtp = null;
+							if (opt) {
+								for(int minLayer:minLayerNum){
+									HBTreeOptimize hbtreeop = new HBTreeOptimize(c, cs,	minLayer);
+									hbtp = new HBTreeMultiThreadPutTest(hbtreeop, inputFilePath);
+									this.hbTreeSinglePutTest(hbtp,rowNum, tn, columnNum, inputFilePath);
+								}
+							} else {
+								HBTree hbtree = new HBTree(c, cs);
+								hbtp = new HBTreeMultiThreadPutTest(hbtree, inputFilePath);
+								this.hbTreeSinglePutTest(hbtp,rowNum, tn, columnNum, inputFilePath);
+							}
+							
 						}
-						
-						this.hbTreeSinglePutTest(hbtp,rowNum, tn, columnNum, inputFilePath);
 					}
 				}
-			}
+		}
 		}
 	}
 
@@ -299,9 +345,9 @@ public class TestControl {
 	public static void main(String[] args) throws Exception {
 		TestControl tc = new TestControl();
 //		tc.bPlusMultiPutTest();
-//		tc.hbTreeMultiPutTest();
 //		tc.bPlusMultiGetTest();
 		tc.hbTreeMultiGetTest();
+//		tc.hbTreeMultiPutTest();
 	}
 
 }
