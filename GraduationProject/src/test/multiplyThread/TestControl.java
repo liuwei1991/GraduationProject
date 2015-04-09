@@ -75,6 +75,7 @@ public class TestControl {
 //					System.out.println("Input String: " + str);
 					//
 					
+					
 					if(isGet){
 						resultWriter.close();
 						this.bPlusSingleGetTest(bp, tn, rowNum, columnNum, inputFilePath);
