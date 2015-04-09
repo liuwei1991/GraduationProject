@@ -175,7 +175,7 @@ public class TestControl {
 				for (int i = 1; i <= 5; i++) {
 					for (int cs : chunkSize) {
 						for (int len : keylen) {
-							if(cs>len) break;
+							if(cs>len) continue;
 							Thread.sleep(5*1000);
 							String inputFilePath = "/ares/TestData/t2/thread=" + tn
 									+ "/keylen=" + len + " columnNum=" + columnNum
@@ -289,7 +289,7 @@ public class TestControl {
 				for (int i = 1; i <= 5; i++) {
 					for (int cs : chunkSize) {
 						for (int len : keylen) {
-							if(cs>len) break;
+							if(cs>len) continue;
 							System.gc();
 							Thread.sleep(5*1000);
 							
