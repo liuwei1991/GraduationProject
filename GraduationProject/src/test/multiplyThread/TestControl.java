@@ -30,7 +30,7 @@ public class TestControl {
 	};
 
 	
-	public void bPlusMultiGetTest() throws Exception{
+	public void bPlusMultiGetOrScanTest(boolean isGet) throws Exception{
 		Date d = new Date(System.currentTimeMillis());
 		CommonVariable.RESULT_FILE_PATH = "/ares/result/bPlus-Get-Result-"
 				+ d.getYear() + "-" + "-" + d.getMonth() + "-" + d.getDay()
@@ -40,11 +40,15 @@ public class TestControl {
 		int threadNum[] = { 8,16,24, 32 };
 		int columnNum = 4;
 		
+//		int keylen[] = { 8 };
+//		int threadNum[] = { 8 };
+//		int columnNum = 4;
+		
 		for (int tn : threadNum) {
 			for (int i = 1; i <= 5; i++) {
 				for (int len : keylen) {
 					System.gc();
-					Thread.sleep(5*1000);
+					Thread.sleep(3*1000);
 					String inputFilePath = "/ares/TestData/t2/thread=" + tn
 							+ "/keylen=" + len + " columnNum=" + columnNum
 							+ "/" + 1000 * i + "w/";
@@ -63,7 +67,6 @@ public class TestControl {
 					System.out.println("Used Memory: "+usedMemory);
 					FileWriter resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
 					resultWriter.write("\r\nUsed Memory: "+usedMemory);
-					resultWriter.close();
 					
 //					InputStreamReader isReader = new InputStreamReader(
 //							System.in);
@@ -71,7 +74,20 @@ public class TestControl {
 //					String str = new BufferedReader(isReader).readLine();
 //					System.out.println("Input String: " + str);
 					//
-					this.bPlusSingleGetTest(bp, tn, rowNum, columnNum, inputFilePath);
+					
+					if(isGet){
+						resultWriter.close();
+						this.bPlusSingleGetTest(bp, tn, rowNum, columnNum, inputFilePath);
+					}else{
+						long startTime = System.currentTimeMillis();
+						
+						bp.testScan();
+						
+						long timeUsed = System.currentTimeMillis() - startTime;
+						System.out.println("Scan time used: " + timeUsed);
+						resultWriter.write("\r\nScan time used: " + timeUsed);
+						resultWriter.close();
+					}
 				}
 			}
 		}
@@ -142,7 +158,7 @@ public class TestControl {
 			for (int i = 1; i <= 5; i++) {
 				for (int len : keylen) {
 					System.gc();
-					Thread.sleep(5*1000);
+					Thread.sleep(3*1000);
 					
 					String inputFilePath = "/ares/TestData/t2/thread=" + tn
 							+ "/keylen=" + len + " columnNum=" + columnNum
@@ -157,7 +173,7 @@ public class TestControl {
 	}
 	
 	
-	public void hbTreeMultiGetTest() throws Exception {
+	public void hbTreeMultiGetOrScanTest(boolean isGet) throws Exception {
 		Date d = new Date(System.currentTimeMillis());
 		CommonVariable.RESULT_FILE_PATH = "/ares/result/hbTree-get-Result-"
 				+ d.getYear() + "-" + "-" + d.getMonth() + "-" + d.getDay()
@@ -170,13 +186,20 @@ public class TestControl {
 		int minLayerNum[] = {64,128,256,512,1024};
 		int columnNum = 4;
 		
+//		int threadNum[] = { 8};
+//		int chunkSize[] = { 2,4,8};
+//		int keylen[] = { 8 };
+//		boolean optimize[] = {false};
+//		int minLayerNum[] = {64,128,256,512,1024};
+//		int columnNum = 4;
+		
 		for(boolean opt:optimize){
 			for (int tn : threadNum) {
 				for (int i = 1; i <= 5; i++) {
 					for (int cs : chunkSize) {
 						for (int len : keylen) {
 							if(cs>len) continue;
-							Thread.sleep(5*1000);
+							Thread.sleep(3*1000);
 							String inputFilePath = "/ares/TestData/t2/thread=" + tn
 									+ "/keylen=" + len + " columnNum=" + columnNum
 									+ "/" + 1000 * i + "w/";
@@ -201,13 +224,24 @@ public class TestControl {
 									resultWriter.write("\r\nUsed Memory: "+usedMemory);
 									resultWriter.close();
 									
-									InputStreamReader isReader = new InputStreamReader(
-											System.in);
-									System.out.println("Record the memory used and the data info,then input a string: ");
-									String str = new BufferedReader(isReader).readLine();
-									System.out.println("Input String: " + str);
+									if(isGet){
+										resultWriter.close();
+										this.hbTreeSingleGetTest(hbtp, tn, rowNum, columnNum, inputFilePath);
+									}else{
+										long startTime = System.currentTimeMillis();
+										HBTree.printHBTree(hbtp.getHbtreeop().rootNodeOpt);
+										long timeUsed = System.currentTimeMillis() - startTime;
+										System.out.println("Optimized scan time used: " + timeUsed);
+										resultWriter.write("\r\nOptimzed scan time used: " + timeUsed);
+										resultWriter.close();
+									}
+									
+//									InputStreamReader isReader = new InputStreamReader(
+//											System.in);
+//									System.out.println("Record the memory used and the data info,then input a string: ");
+//									String str = new BufferedReader(isReader).readLine();
+//									System.out.println("Input String: " + str);
 									//
-									this.hbTreeSingleGetTest(hbtp, tn, rowNum, columnNum, inputFilePath);
 								}
 								
 							} else {
@@ -225,7 +259,18 @@ public class TestControl {
 								System.out.println("Used Memory: "+usedMemory);
 								FileWriter resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
 								resultWriter.write("\r\nUsed Memory: "+usedMemory);
-								resultWriter.close();
+
+								if(isGet){
+									resultWriter.close();
+									this.hbTreeSingleGetTest(hbtp, tn, rowNum, columnNum, inputFilePath);
+								}else{
+									long startTime = System.currentTimeMillis();
+									HBTree.printHBTree(hbtp.getHbtree().rootNode);
+									long timeUsed = System.currentTimeMillis() - startTime;
+									System.out.println("Scan time used: " + timeUsed);
+									resultWriter.write("\r\nScan time used: " + timeUsed);
+									resultWriter.close();
+								}
 								
 //								InputStreamReader isReader = new InputStreamReader(
 //										System.in);
@@ -233,7 +278,6 @@ public class TestControl {
 //								String str = new BufferedReader(isReader).readLine();
 //								System.out.println("Input String: " + str);
 								//
-								this.hbTreeSingleGetTest(hbtp, tn, rowNum, columnNum, inputFilePath);
 							}
 							
 						}
@@ -291,7 +335,7 @@ public class TestControl {
 						for (int len : keylen) {
 							if(cs>len) continue;
 							System.gc();
-							Thread.sleep(5*1000);
+							Thread.sleep(3*1000);
 							
 							String inputFilePath = "/ares/TestData/t2/thread=" + tn
 									+ "/keylen=" + len + " columnNum=" + columnNum
@@ -345,8 +389,8 @@ public class TestControl {
 	public static void main(String[] args) throws Exception {
 		TestControl tc = new TestControl();
 //		tc.bPlusMultiPutTest();
-//		tc.bPlusMultiGetTest();
-		tc.hbTreeMultiGetTest();
+		tc.bPlusMultiGetOrScanTest(false);
+		tc.hbTreeMultiGetOrScanTest(false);
 //		tc.hbTreeMultiPutTest();
 	}
 

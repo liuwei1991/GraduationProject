@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentNavigableMap;
@@ -65,7 +66,16 @@ public class BPlus {
 		return (ConcurrentSkipListMap<String, Value>) this.delegatee.subMap(fromKey, fromInclusive, toKey, toInclusive);
 	}
 
-
+	public void testScan(){
+		for(Entry<String,Value> e: this.delegatee.entrySet()){
+			String key = e.getKey();
+			for(Entry<String,String> kv:e.getValue().getAllKV().entrySet()){
+				String column = kv.getKey();
+				String value = kv.getValue();
+			}
+		}
+	}
+	
 	public void clear() {
 		this.delegatee.clear();
 	}

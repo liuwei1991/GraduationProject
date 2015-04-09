@@ -124,7 +124,7 @@ public class HBTree {
 		return result;
 	}
 
-	public void scan(ConcurrentSkipListMap<String, Value> result,String fromKey, String toKey,Node node,int layer,String prefix){
+	private void scan(ConcurrentSkipListMap<String, Value> result,String fromKey, String toKey,Node node,int layer,String prefix){
 		if(node==null){
 			return;
 		}
@@ -189,16 +189,24 @@ public class HBTree {
 				if(queue.isEmpty()){
 					return;
 				}
-				System.out.println();
+//				System.out.println();
 				continue;
 			}
 			ConcurrentNavigableMap<String, Node> nodeMap = curNode.getNextLayer();
 			for(Entry<String,Node> entry:nodeMap.entrySet()){
-				queue.add(entry.getValue());
-				System.out.print(entry.getKey()+"("+entry.getValue().isValue()+"),");
+				Node n = entry.getValue();
+				queue.add(n);
+				if(n.isValue()){
+					Value v = n.getValue();
+					for(Entry<String,String> e:v.getAllKV().entrySet()){
+						String column = e.getKey();
+						String value = e.getValue();
+					}
+				}
+//				System.out.print(entry.getKey()+"("+entry.getValue().isValue()+"),");
 			}
 			queue.add(null);
-			System.out.print("    ");
+//			System.out.print("    ");
 		}
 	}
 	
@@ -212,16 +220,24 @@ public class HBTree {
 				if(queue.isEmpty()){
 					return;
 				}
-				System.out.println();
+//				System.out.println();
 				continue;
 			}
 			ConcurrentNavigableMap<String, NodeOptimize> nodeMap = curNode.getNextLayer();
 			for(Entry<String,NodeOptimize> entry:nodeMap.entrySet()){
-				queue.add(entry.getValue());
-				System.out.print(entry.getKey()+"("+entry.getValue().isValue()+"),");
+				NodeOptimize n = entry.getValue();
+				queue.add(n);
+				if(n.isValue()){
+					Value v = n.getValue();
+					for(Entry<String,String> e:v.getAllKV().entrySet()){
+						String column = e.getKey();
+						String value = e.getValue();
+					}
+				}
+//				System.out.print(entry.getKey()+"("+entry.getValue().isValue()+"),");
 			}
 			queue.add(null);
-			System.out.print("    ");
+//			System.out.print("    ");
 		}
 	}
 	
