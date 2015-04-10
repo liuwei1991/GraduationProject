@@ -8,6 +8,7 @@ public class NodeOptimize {
 	private ConcurrentSkipListMap<String,NodeOptimize> nextLayer;
 	private boolean isLeaf;
 	private boolean isValue;
+	public boolean isAdjust = false;
 	private Value value;
 	
 	public NodeOptimize(){

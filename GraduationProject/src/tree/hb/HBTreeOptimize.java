@@ -93,7 +93,7 @@ public class HBTreeOptimize {
 		return true;
 	}
 	
-	public boolean add(String key, Map<String, String> kvs) {
+	public boolean add(String key, Map<String, String> kvs) throws InterruptedException {
 		int len = 0;
 		ConcurrentNavigableMap<String, NodeOptimize> nodeMap = rootNodeOpt.getNextLayer();
 		NodeOptimize nodeOpt = this.rootNodeOpt;
@@ -101,9 +101,18 @@ public class HBTreeOptimize {
 			nodeMap = nodeOpt.getNextLayer();
 			if (nodeOpt.isLeaf()) {
 				String cur = key.substring(len);
-				this.insertDataNode(nodeOpt, cur, kvs);
-				if(nodeOpt.getNextLayer().size()>this.minLayerNum){
-					this.adjustLeafNode(nodeOpt);
+				if(nodeOpt.getNextLayer().size()>this.minLayerNum && !nodeOpt.isAdjust){
+					if(!nodeOpt.isAdjust){
+						nodeOpt.isAdjust = true;
+						this.insertDataNode(nodeOpt, cur, kvs);
+						this.adjustLeafNode(nodeOpt);
+						nodeOpt.isAdjust = false;
+					}else{
+						while(nodeOpt.isAdjust){
+							Thread.sleep(500);
+							this.insertDataNode(nodeOpt, cur, kvs);
+						}
+					}
 				}
 				return true;
 			} else {
