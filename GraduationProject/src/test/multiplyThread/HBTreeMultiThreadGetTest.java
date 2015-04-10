@@ -114,29 +114,36 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 		try {
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
-
-			while (true) {
-				String str = br.readLine();
-				// if reach the end of the file, the start from the begin of the
-				// file.
-				if (str == null) {
-//					fr = new FileReader(file);
-//					br = new BufferedReader(fr,CommonVariable.BUFFERED_READER_SIZE);
-//					continue;
-					break;
-				}
-				String[] lines = str.split(" ");
-				for (int j = 1; j < lines.length; j++) {
-					if(this.isOptimize){
-						this.hbtreeop.get(lines[0], CommonVariable.COLUMN + j);
-					}else{
-						this.hbtree.get(lines[0], CommonVariable.COLUMN + j);
+			if(this.isOptimize){
+				while (true) {
+					String str = br.readLine();
+					if (str == null) {
+						break;
 					}
-					synchronized (HBTreeMultiThreadGetTest.class) {
-						totalNum++;
+					String[] lines = str.split(" ");
+					for (int j = 1; j < lines.length; j++) {
+						this.hbtreeop.get(lines[0], CommonVariable.COLUMN + j);
+						synchronized (HBTreeMultiThreadGetTest.class) {
+							totalNum++;
+						}
+					}
+				}
+			}else{
+				while (true) {
+					String str = br.readLine();
+					if (str == null) {
+						break;
+					}
+					String[] lines = str.split(" ");
+					for (int j = 1; j < lines.length; j++) {
+						this.hbtree.get(lines[0], CommonVariable.COLUMN + j);
+						synchronized (HBTreeMultiThreadGetTest.class) {
+							totalNum++;
+						}
 					}
 				}
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
