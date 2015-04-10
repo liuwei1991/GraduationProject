@@ -127,7 +127,11 @@ public class HBTreeMultiThreadGetTest implements Runnable {
 				}
 				String[] lines = str.split(" ");
 				for (int j = 1; j < lines.length; j++) {
-					this.hbtree.get(lines[0], CommonVariable.COLUMN + j);
+					if(this.isOptimize){
+						this.hbtreeop.get(lines[0], CommonVariable.COLUMN + j);
+					}else{
+						this.hbtree.get(lines[0], CommonVariable.COLUMN + j);
+					}
 					synchronized (HBTreeMultiThreadGetTest.class) {
 						totalNum++;
 					}

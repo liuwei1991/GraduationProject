@@ -1,8 +1,6 @@
 package test.multiplyThread;
 
-import java.io.BufferedReader;
 import java.io.FileWriter;
-import java.io.InputStreamReader;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -29,71 +27,6 @@ public class TestControl {
 		}
 	};
 
-	
-	public void bPlusMultiGetOrScanTest(boolean isGet) throws Exception{
-		Date d = new Date(System.currentTimeMillis());
-		CommonVariable.RESULT_FILE_PATH = "/ares/result/bPlus-Get-Result-"
-				+ d.getYear() + "-" + "-" + d.getMonth() + "-" + d.getDay()
-				+ "-" + d.getHours() + ":" + d.getMinutes() +":"+d.getSeconds()+ ".txt";
-		
-		int keylen[] = { 8, 16, 24, 32 };
-		int threadNum[] = { 8,16,24, 32 };
-		int columnNum = 4;
-		
-//		int keylen[] = { 8 };
-//		int threadNum[] = { 8 };
-//		int columnNum = 4;
-		
-		for (int tn : threadNum) {
-			for (int i = 1; i <= 5; i++) {
-				for (int len : keylen) {
-					System.gc();
-					Thread.sleep(3*1000);
-					String inputFilePath = "/ares/TestData/t2/thread=" + tn
-							+ "/keylen=" + len + " columnNum=" + columnNum
-							+ "/" + 1000 * i + "w/";
-					int rowNum = i * 1000 * 10000;
-					BPlus bp = new BPlus(c);
-					
-					//Input data first.
-					this.bPlusSinglePutTest(bp,rowNum, len, tn, columnNum,
-							inputFilePath);
-					
-					//Call gc, record the memory used.
-					System.gc();
-					
-					Runtime run = Runtime.getRuntime();
-					long usedMemory = run.totalMemory()-run.freeMemory();
-					System.out.println("Used Memory: "+usedMemory);
-					FileWriter resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
-					resultWriter.write("\r\nUsed Memory: "+usedMemory);
-					
-//					InputStreamReader isReader = new InputStreamReader(
-//							System.in);
-//					System.out.println("Record the memory used and the data info,then input a string: ");
-//					String str = new BufferedReader(isReader).readLine();
-//					System.out.println("Input String: " + str);
-					//
-					
-					
-					if(isGet){
-						resultWriter.close();
-						this.bPlusSingleGetTest(bp, tn, rowNum, columnNum, inputFilePath);
-					}else{
-						long startTime = System.currentTimeMillis();
-						
-						bp.testScan();
-						
-						long timeUsed = System.currentTimeMillis() - startTime;
-						System.out.println("Scan time used: " + timeUsed);
-						resultWriter.write("\r\nScan time used: " + timeUsed);
-						resultWriter.close();
-					}
-				}
-			}
-		}
-	}
-	
 	private void bPlusSingleGetTest(BPlus bp,int threadNum,int rowNum,int columnNum,String inputFilePath) throws Exception{
 		BPlusMultiThreadGetTest btg = new BPlusMultiThreadGetTest(bp,inputFilePath,threadNum);
 		for (int j = 0; j < threadNum; j++) {
@@ -116,7 +49,6 @@ public class TestControl {
 		BPlusMultiThreadGetTest.output.start();
 		BPlusMultiThreadGetTest.output.join();
 	}
-	
 	
 	private void bPlusSinglePutTest(BPlus bp,int rowNum, int keyLen, int threadNum,
 			int columnNum, String inputFilePath) throws Exception {
@@ -148,11 +80,11 @@ public class TestControl {
 
 		Date d = new Date(System.currentTimeMillis());
 		CommonVariable.RESULT_FILE_PATH = "/ares/result/bPlus-put-Result-"
-				+ d.getYear() + "-" + "-" + d.getMonth() + "-" + d.getDay()
+				+ d.getMonth() + "-" + d.getDay()
 				+ "-" + d.getHours() + ":" + d.getMinutes() +":"+d.getSeconds()+ ".txt";
 		
 		int keylen[] = { 8, 16, 24, 32 };
-		int threadNum[] = { 8,16,24, 32 };
+		int threadNum[] = { 8,16};
 		int columnNum = 4;
 		
 		for (int tn : threadNum) {
@@ -168,121 +100,6 @@ public class TestControl {
 					BPlus bp = new BPlus(c);
 					this.bPlusSinglePutTest(bp,rowNum, len, tn, columnNum,
 							inputFilePath);
-				}
-			}
-		}
-	}
-	
-	
-	public void hbTreeMultiGetOrScanTest(boolean isGet) throws Exception {
-		Date d = new Date(System.currentTimeMillis());
-		CommonVariable.RESULT_FILE_PATH = "/ares/result/hbTree-get-Result-"
-				+ d.getYear() + "-" + "-" + d.getMonth() + "-" + d.getDay()
-				+ "-" + d.getHours() + ":" + d.getMinutes() +":"+d.getSeconds()+ ".txt";
-		
-		int threadNum[] = { 8,16,24,32};
-		int chunkSize[] = { 32,28,24,20,16,12,8,4};
-		int keylen[] = { 8,16,24,32 };
-		boolean optimize[] = {false,true};
-		int minLayerNum[] = {64,128,256,512,1024};
-		int columnNum = 4;
-		
-//		int threadNum[] = { 8};
-//		int chunkSize[] = { 2,4,8};
-//		int keylen[] = { 8 };
-//		boolean optimize[] = {false};
-//		int minLayerNum[] = {64,128,256,512,1024};
-//		int columnNum = 4;
-		
-		for(boolean opt:optimize){
-			for (int tn : threadNum) {
-				for (int i = 1; i <= 5; i++) {
-					for (int cs : chunkSize) {
-						for (int len : keylen) {
-							if(cs>len) continue;
-							Thread.sleep(3*1000);
-							String inputFilePath = "/ares/TestData/t2/thread=" + tn
-									+ "/keylen=" + len + " columnNum=" + columnNum
-									+ "/" + 1000 * i + "w/";
-							int rowNum = i * 1000 * 10000;
-							HBTreeMultiThreadPutTest hbtp = null;
-							if (opt) {
-								for(int minLayer:minLayerNum){
-									System.gc();
-									HBTreeOptimize hbtreeop = new HBTreeOptimize(c, cs, minLayer);
-									hbtp = new HBTreeMultiThreadPutTest(hbtreeop, inputFilePath);
-									
-									//Input data first.
-									this.hbTreeSinglePutTest(hbtp,rowNum, tn, columnNum, inputFilePath);
-									
-									//Call gc, record the memory used.
-									System.gc();
-									
-									Runtime run = Runtime.getRuntime();
-									long usedMemory = run.totalMemory()-run.freeMemory();
-									System.out.println("Used Memory: "+usedMemory);
-									FileWriter resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
-									resultWriter.write("\r\nUsed Memory: "+usedMemory);
-									resultWriter.close();
-									
-									if(isGet){
-										resultWriter.close();
-										this.hbTreeSingleGetTest(hbtp, tn, rowNum, columnNum, inputFilePath);
-									}else{
-										long startTime = System.currentTimeMillis();
-										HBTree.printHBTree(hbtp.getHbtreeop().rootNodeOpt);
-										long timeUsed = System.currentTimeMillis() - startTime;
-										System.out.println("Optimized scan time used: " + timeUsed);
-										resultWriter.write("\r\nOptimzed scan time used: " + timeUsed);
-										resultWriter.close();
-									}
-									
-//									InputStreamReader isReader = new InputStreamReader(
-//											System.in);
-//									System.out.println("Record the memory used and the data info,then input a string: ");
-//									String str = new BufferedReader(isReader).readLine();
-//									System.out.println("Input String: " + str);
-									//
-								}
-								
-							} else {
-								System.gc();
-								HBTree hbtree = new HBTree(c, cs);
-								hbtp = new HBTreeMultiThreadPutTest(hbtree, inputFilePath);
-								//Input data first.
-								this.hbTreeSinglePutTest(hbtp,rowNum, tn, columnNum, inputFilePath);
-								
-								//Call gc, record the memory used.
-								System.gc();
-								
-								Runtime run = Runtime.getRuntime();
-								long usedMemory = run.totalMemory()-run.freeMemory();
-								System.out.println("Used Memory: "+usedMemory);
-								FileWriter resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
-								resultWriter.write("\r\nUsed Memory: "+usedMemory);
-
-								if(isGet){
-									resultWriter.close();
-									this.hbTreeSingleGetTest(hbtp, tn, rowNum, columnNum, inputFilePath);
-								}else{
-									long startTime = System.currentTimeMillis();
-									HBTree.printHBTree(hbtp.getHbtree().rootNode);
-									long timeUsed = System.currentTimeMillis() - startTime;
-									System.out.println("Scan time used: " + timeUsed);
-									resultWriter.write("\r\nScan time used: " + timeUsed);
-									resultWriter.close();
-								}
-								
-//								InputStreamReader isReader = new InputStreamReader(
-//										System.in);
-//								System.out.println("Record the memory used and the data info,then input a string: ");
-//								String str = new BufferedReader(isReader).readLine();
-//								System.out.println("Input String: " + str);
-								//
-							}
-							
-						}
-					}
 				}
 			}
 		}
@@ -320,18 +137,18 @@ public class TestControl {
 	public void hbTreeMultiPutTest() throws Exception {
 		Date d = new Date(System.currentTimeMillis());
 		CommonVariable.RESULT_FILE_PATH = "/ares/result/hbTree-put-Result-"
-				+ d.getYear() + "-" + "-" + d.getMonth() + "-" + d.getDay()
+				+ d.getMonth() + "-" + d.getDay()
 				+ "-" + d.getHours() + ":" + d.getMinutes() +":"+d.getSeconds()+ ".txt";
 		
-		int threadNum[] = { 8,16,24, 32};
-		int chunkSize[] = { 32,28,24,20,16,12,8,4};
+		int threadNum[] = { 8,16};
+		int chunkSize[] = { 32,28,24,20,16,12,8};
 		int keylen[] = { 8, 16, 24, 32 };
 		boolean optimize[] = {false,true};
 		int minLayerNum[] = {64,128,256,512,1024};
 		int columnNum = 4;
 		for(boolean opt:optimize){
 			for (int tn : threadNum) {
-				for (int i = 1; i <= 5; i++) {
+				for (int i = 4; i <= 5; i++) {
 					for (int cs : chunkSize) {
 						for (int len : keylen) {
 							if(cs>len) continue;
@@ -387,12 +204,164 @@ public class TestControl {
 		HBTreeMultiThreadPutTest.output.join();
 	}
 
+	public void bPlusMultiTest() throws Exception{
+		Date d = new Date(System.currentTimeMillis());
+		CommonVariable.RESULT_FILE_PATH = "/ares/result/bPlus-Get-Result-"
+				+ d.getMonth() + "-" + d.getDay()
+				+ "-" + d.getHours() + ":" + d.getMinutes() +":"+d.getSeconds()+ ".txt";
+		
+		int keylen[] = { 8, 16, 24, 32 };
+		int threadNum[] = { 8,16 };
+		int columnNum = 4;
+		
+//		int keylen[] = { 8 };
+//		int threadNum[] = { 8 };
+//		int columnNum = 4;
+		
+		for (int tn : threadNum) {
+			for (int i = 1; i <= 5; i++) {
+				for (int len : keylen) {
+					System.gc();
+					Thread.sleep(3*1000);
+					String inputFilePath = "/ares/TestData/t2/thread=" + tn
+							+ "/keylen=" + len + " columnNum=" + columnNum
+							+ "/" + 1000 * i + "w/";
+					int rowNum = i * 1000 * 10000;
+					BPlus bp = new BPlus(c);
+					
+					//Input data first.
+					this.bPlusSinglePutTest(bp,rowNum, len, tn, columnNum,
+							inputFilePath);
+					
+					//Call gc, record the memory used.
+					System.gc();
+					
+					Runtime run = Runtime.getRuntime();
+					long usedMemory = run.totalMemory()-run.freeMemory();
+					System.out.println("Used Memory: "+usedMemory);
+					FileWriter resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
+					resultWriter.write("\r\nUsed Memory: "+usedMemory);
+					
+					long startTime = System.currentTimeMillis();
+					bp.testScan();
+					long timeUsed = System.currentTimeMillis() - startTime;
+					System.out.println("Scan time used: " + timeUsed);
+					resultWriter.write("\r\nScan time used: " + timeUsed);
+					resultWriter.close();
+					
+					System.gc();
+					this.bPlusSingleGetTest(bp, tn, rowNum, columnNum, inputFilePath);
+				}
+			}
+		}
+	}
+	
+	public void hbTreeMultiTest() throws Exception {
+		Date d = new Date(System.currentTimeMillis());
+		CommonVariable.RESULT_FILE_PATH = "/ares/result/hbTree-get-Result-"
+				+ d.getMonth() + "-" + d.getDay()
+				+ "-" + d.getHours() + ":" + d.getMinutes() +":"+d.getSeconds()+ ".txt";
+		
+		int threadNum[] = { 8,16};
+		int chunkSize[] = { 32,28,24,20,16,12,8,4};
+		int keylen[] = { 8,16,24,32 };
+		boolean optimize[] = {false,true};
+		int minLayerNum[] = {64,128,256,512,1024};
+		int columnNum = 4;
+		
+//		int threadNum[] = { 8};
+//		int chunkSize[] = {8,4,2};
+//		int keylen[] = { 8 };
+//		boolean optimize[] = {true};
+//		int minLayerNum[] = {64,128,256,512,1024};
+//		int columnNum = 4;
+		
+		for(boolean opt:optimize){
+			for (int tn : threadNum) {
+				for (int i = 1; i <= 5; i++) {
+					for (int cs : chunkSize) {
+						for (int len : keylen) {
+							if(cs>len) continue;
+							Thread.sleep(3*1000);
+							String inputFilePath = "/ares/TestData/t2/thread=" + tn
+									+ "/keylen=" + len + " columnNum=" + columnNum
+									+ "/" + 1000 * i + "w/";
+							int rowNum = i * 1000 * 10000;
+							HBTreeMultiThreadPutTest hbtp = null;
+							if (opt) {
+								for(int minLayer:minLayerNum){
+									System.gc();
+									HBTreeOptimize hbtreeop = new HBTreeOptimize(c, cs, minLayer);
+									hbtp = new HBTreeMultiThreadPutTest(hbtreeop, inputFilePath);
+									
+									//Input data first.
+									this.hbTreeSinglePutTest(hbtp,rowNum, tn, columnNum, inputFilePath);
+									
+									//Call gc, record the memory used.
+									System.gc();
+									
+									Runtime run = Runtime.getRuntime();
+									long usedMemory = run.totalMemory()-run.freeMemory();
+									System.out.println("Used Memory: "+usedMemory+",MinLayerNum: "+minLayer);
+									FileWriter resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
+									resultWriter.write("\r\nUsed Memory: "+usedMemory+",MinLayerNum: "+minLayer);
+									
+									long startTime = System.currentTimeMillis();
+									HBTree.printHBTree(hbtp.getHbtreeop().rootNodeOpt);
+									long timeUsed = System.currentTimeMillis() - startTime;
+									System.out.println("Optimized scan time used: " + timeUsed);
+									resultWriter.write("\r\nOptimzed scan time used: " + timeUsed);
+									resultWriter.close();
+									
+									System.gc();
+									this.hbTreeSingleGetTest(hbtp, tn, rowNum, columnNum, inputFilePath);
+								}
+								
+							} else {
+								System.gc();
+								HBTree hbtree = new HBTree(c, cs);
+								hbtp = new HBTreeMultiThreadPutTest(hbtree, inputFilePath);
+								//Input data first.
+								this.hbTreeSinglePutTest(hbtp,rowNum, tn, columnNum, inputFilePath);
+								
+								//Call gc, record the memory used.
+								System.gc();
+								
+								Runtime run = Runtime.getRuntime();
+								long usedMemory = run.totalMemory()-run.freeMemory();
+								System.out.println("Used Memory: "+usedMemory);
+								FileWriter resultWriter = new FileWriter(CommonVariable.RESULT_FILE_PATH,true);
+								resultWriter.write("\r\nUsed Memory: "+usedMemory);
+
+								long startTime = System.currentTimeMillis();
+								HBTree.printHBTree(hbtp.getHbtree().rootNode);
+								long timeUsed = System.currentTimeMillis() - startTime;
+								System.out.println("Scan time used: " + timeUsed);
+								resultWriter.write("\r\nScan time used: " + timeUsed);
+								resultWriter.close();
+								
+								System.gc();
+								this.hbTreeSingleGetTest(hbtp, tn, rowNum, columnNum, inputFilePath);
+								
+//								InputStreamReader isReader = new InputStreamReader(
+//										System.in);
+//								System.out.println("Record the memory used and the data info,then input a string: ");
+//								String str = new BufferedReader(isReader).readLine();
+//								System.out.println("Input String: " + str);
+								//
+							}
+							
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	public static void main(String[] args) throws Exception {
 		TestControl tc = new TestControl();
-//		tc.bPlusMultiPutTest();
-		tc.bPlusMultiGetOrScanTest(false);
-		tc.hbTreeMultiGetOrScanTest(false);
-//		tc.hbTreeMultiPutTest();
+//		tc.bPlusMultiTest();
+		tc.hbTreeMultiTest();
 	}
 
 }
