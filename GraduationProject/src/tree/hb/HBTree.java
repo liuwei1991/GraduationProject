@@ -198,10 +198,10 @@ public class HBTree {
 				queue.add(n);
 				if(n.isValue()){
 					Value v = n.getValue();
-					for(Entry<String,String> e:v.getAllKV().entrySet()){
-						String column = e.getKey();
-						String value = e.getValue();
-					}
+//					for(Entry<String,String> e:v.getAllKV().entrySet()){
+//						String column = e.getKey();
+//						String value = e.getValue();
+//					}
 				}
 //				System.out.print(entry.getKey()+"("+entry.getValue().isValue()+"),");
 			}
@@ -229,10 +229,10 @@ public class HBTree {
 				queue.add(n);
 				if(n.isValue()){
 					Value v = n.getValue();
-					for(Entry<String,String> e:v.getAllKV().entrySet()){
-						String column = e.getKey();
-						String value = e.getValue();
-					}
+//					for(Entry<String,String> e:v.getAllKV().entrySet()){
+//						String column = e.getKey();
+//						String value = e.getValue();
+//					}
 				}
 //				System.out.print(entry.getKey()+"("+entry.getValue().isValue()+"),");
 			}

@@ -30,6 +30,9 @@ public class HBTreeOptimize {
 				.getNextLayer();
 		NodeOptimize nodeOpt = rootNodeOpt;
 		while (len < key.length()) {
+			if(nodeOpt==null){
+				return null;
+			}
 			nodeMap = nodeOpt.getNextLayer();
 			if (nodeMap == null) {
 				return null;
