@@ -360,7 +360,7 @@ public class TestControl {
 	
 	public static void main(String[] args) throws Exception {
 		TestControl tc = new TestControl();
-//		tc.bPlusMultiTest();
+		tc.bPlusMultiTest();
 		tc.hbTreeMultiTest();
 	}
 
